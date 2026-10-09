@@ -9,7 +9,7 @@ APP_HOST="video-lab-team-${NS#team-}.cosmos.vastdata.com"
 export KUBECONFIG="${KUBECONFIG:-/config/${NS}-k8s.yaml}"
 
 kubectl -n "$NS" create configmap crosswise-code \
-  --from-file=main.py=app/main.py --from-file=index.html=app/index.html --from-file=label.html=app/label.html \
+  --from-file=main.py=app/main.py --from-file=index.html=app/index.html --from-file=label.html=app/label.html --from-file=logo.jpg=app/logo.jpg \
   --from-file=agent.py=agent.py --from-file=decisions.json=data/decisions.json \
   --from-file=cosmos_captions.json=data/cosmos_captions.json --from-file=label_set.json=data/label_set.json \
   --dry-run=client -o yaml | kubectl apply --server-side --force-conflicts -f -

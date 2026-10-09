@@ -3,57 +3,77 @@
 <head>
 <meta charset="utf-8">
 <meta name="viewport" content="width=device-width, initial-scale=1">
-<title>CrossWise · label crossings</title>
-<link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;600;800&display=swap" rel="stylesheet">
+<title>CrossWise · Evaluate</title>
+<link rel="icon" href="logo.jpg">
+<link href="https://fonts.googleapis.com/css2?family=Inter:opsz,wght@14..32,400..800&display=swap" rel="stylesheet">
 <style>
-  :root { --bg:#07090d; --card:rgba(22,27,36,.75); --line:rgba(255,255,255,.08); --text:#eef2f7; --mute:#8a94a6; --go:#22c55e; --nogo:#ef4444; }
-  * { box-sizing:border-box; }
-  body { margin:0; font:14px/1.5 Inter,system-ui,sans-serif; color:var(--text); background:var(--bg);
-         background-image:radial-gradient(1000px 500px at 10% -10%,rgba(124,156,255,.14),transparent 60%); min-height:100vh; }
-  .wrap { max-width:980px; margin:0 auto; padding:22px; }
-  h1 { margin:0; font-size:22px; font-weight:800; } .sub { color:var(--mute); margin:4px 0 16px; }
-  .card { background:var(--card); border:1px solid var(--line); border-radius:18px; padding:16px; }
-  video { width:100%; aspect-ratio:16/9; background:#000; border-radius:12px; display:block; }
-  .q { font-size:18px; font-weight:700; margin:16px 0 4px; } .hint { color:var(--mute); font-size:12.5px; }
-  .btns { display:grid; grid-template-columns:1fr 1fr; gap:12px; margin-top:14px; }
-  .btns button { border:0; border-radius:14px; padding:18px; font:800 18px Inter; color:#fff; cursor:pointer; letter-spacing:.5px; transition:transform .1s; }
+  :root { --card:#141416; --card2:#1c1c1e; --fill:#2c2c2e; --sep:rgba(255,255,255,.08); --text:#f5f5f7; --sub:#a1a1a6; --ter:#6e6e73;
+          --green:#30d158; --red:#ff453a; --blue:#0a84ff;
+          --font:-apple-system,BlinkMacSystemFont,"SF Pro Display","SF Pro Text",Inter,"Helvetica Neue",Arial,sans-serif; }
+  * { box-sizing:border-box; -webkit-font-smoothing:antialiased; }
+  body { margin:0; font:15px/1.47 var(--font); letter-spacing:-.01em; color:var(--text); background:#000; min-height:100vh; }
+  nav { position:sticky; top:0; z-index:5; height:52px; display:flex; align-items:center; gap:10px; padding:0 22px;
+        background:rgba(0,0,0,.72); backdrop-filter:saturate(180%) blur(20px); -webkit-backdrop-filter:saturate(180%) blur(20px); border-bottom:1px solid var(--sep); }
+  nav img { width:28px; height:28px; border-radius:7px; } nav b { font-weight:600; font-size:17px; letter-spacing:-.02em; }
+  nav a { margin-left:auto; color:var(--blue); text-decoration:none; font-size:13px; }
+  .wrap { max-width:920px; margin:0 auto; padding:34px 22px 60px; }
+  h1 { margin:0; font-size:40px; font-weight:700; letter-spacing:-.035em; } .sub { color:var(--sub); font-size:17px; margin:6px 0 22px; }
+  kbd { font:600 12px var(--font); background:var(--fill); border-radius:5px; padding:2px 6px; color:var(--text); }
+  .card { background:var(--card); border:1px solid var(--sep); border-radius:24px; padding:18px; }
+  video { width:100%; aspect-ratio:16/9; background:#000; border-radius:16px; display:block; object-fit:cover; }
+  .meta { display:flex; justify-content:space-between; color:var(--sub); font-size:13px; margin-bottom:12px; }
+  .q { font-size:21px; font-weight:600; letter-spacing:-.02em; margin:18px 0 4px; } .hint { color:var(--sub); font-size:13px; }
+  .btns { display:grid; grid-template-columns:1fr 1fr; gap:12px; margin-top:16px; }
+  .btns button { border:0; border-radius:16px; padding:18px; font:600 18px var(--font); cursor:pointer; transition:transform .15s, box-shadow .2s, background .2s; }
   .btns button:active { transform:scale(.98); }
-  .safe { background:linear-gradient(135deg,#16a34a,#22c55e); box-shadow:0 10px 30px rgba(34,197,94,.25); }
-  .unsafe { background:linear-gradient(135deg,#dc2626,#ef4444); box-shadow:0 10px 30px rgba(239,68,68,.25); }
-  .sel { outline:3px solid #fff; }
-  .nav { display:flex; justify-content:space-between; align-items:center; margin-top:14px; }
-  .nav button, .dl { background:rgba(255,255,255,.05); color:var(--text); border:1px solid var(--line); border-radius:10px; padding:8px 14px; font:600 13px Inter; cursor:pointer; text-decoration:none; }
-  .dots { display:flex; gap:5px; flex-wrap:wrap; margin:12px 0 0; }
-  .dots i { width:22px; height:8px; border-radius:4px; background:rgba(255,255,255,.1); cursor:pointer; }
-  .dots i.safe { background:var(--go); } .dots i.unsafe { background:var(--nogo); } .dots i.cur { outline:2px solid #fff; }
-  .meta { display:flex; justify-content:space-between; color:var(--mute); font-size:12.5px; margin-bottom:10px; }
-  .done { display:none; margin-top:14px; padding:12px; border-radius:12px; border:1px solid rgba(34,197,94,.4); background:rgba(34,197,94,.08); }
+  .safe { background:rgba(48,209,88,.16); color:#7ee49b; } .safe:hover { background:rgba(48,209,88,.24); }
+  .unsafe { background:rgba(255,69,58,.16); color:#ff8a80; } .unsafe:hover { background:rgba(255,69,58,.24); }
+  .safe.sel { background:var(--green); color:#000; } .unsafe.sel { background:var(--red); color:#fff; }
+  .nav2 { display:flex; justify-content:space-between; align-items:center; gap:12px; margin-top:16px; }
+  .nav2 button, .dl { background:var(--fill); color:var(--text); border:0; border-radius:980px; padding:8px 16px; font:500 13px var(--font); cursor:pointer; text-decoration:none; }
+  .dots { display:flex; gap:5px; flex-wrap:wrap; justify-content:center; }
+  .dots i { width:20px; height:6px; border-radius:3px; background:var(--fill); cursor:pointer; transition:background .2s; }
+  .dots i.safe { background:var(--green); } .dots i.unsafe { background:var(--red); } .dots i.cur { box-shadow:0 0 0 2px #fff; }
+  .done { display:none; margin-top:16px; padding:14px 16px; border-radius:14px; background:rgba(48,209,88,.1); color:#c7f5d3; font-size:14px; }
+  .done .dl { margin-left:10px; }
 </style>
 </head>
 <body>
+<nav><img src="logo.jpg" alt=""><b>CrossWise</b><a href="./">← Back to live view</a></nav>
 <div class="wrap">
-  <h1>Label crossings · blind evaluation</h1>
-  <p class="sub">The model's decision is hidden. Judge only what you see. Keys: <b>S</b> safe · <b>U</b> unsafe · ← → navigate.</p>
+  <h1>Blind evaluation.</h1>
+  <p class="sub">The model’s decision is hidden. Judge only what you see. <kbd>S</kbd> safe · <kbd>U</kbd> unsafe · <kbd>←</kbd> <kbd>→</kbd> navigate.</p>
   <div class="card">
-    <div class="meta"><span id="pos"></span><span id="cam"></span><span id="save" class="hint"></span></div>
+    <div class="meta"><span id="pos"></span><span id="cam"></span><span id="save"></span></div>
     <video id="v" autoplay muted loop playsinline controls></video>
-    <div class="q">Would it be safe for a sidewalk delivery robot to <u>start crossing now</u>?</div>
-    <div class="hint">Safe = clear walk/green phase, no vehicle moving or turning through the crosswalk, path passable. Otherwise unsafe.</div>
-    <div class="btns"><button class="safe" id="bs">✓ SAFE</button><button class="unsafe" id="bu">✕ UNSAFE</button></div>
-    <div class="nav"><button id="prev">← Back</button><div class="dots" id="dots"></div><button id="next">Skip →</button></div>
+    <div class="q">Would it be safe for a delivery robot to start crossing now?</div>
+    <div class="hint">Safe = clear walk or green phase, no vehicle moving or turning through the crosswalk, path passable. Otherwise unsafe.</div>
+    <div class="btns"><button class="safe" id="bs">Safe</button><button class="unsafe" id="bu">Unsafe</button></div>
+    <div class="nav2"><button id="prev">← Back</button><div class="dots" id="dots"></div><button id="next">Skip →</button></div>
     <div class="done" id="done">All 20 labelled — thank you. Labels are saved on the server and in this browser.
-      <a class="dl" id="dl" download="crosswise_labels.json">Download labels JSON</a></div>
+      <a class="dl" id="dl" download="crosswise_labels.json">Download JSON</a></div>
   </div>
 </div>
 <script>
 const BASE = location.pathname.replace(/label(\.html)?\/?$/, '');
 const $ = id => document.getElementById(id);
 let items = [], i = 0, labels = JSON.parse(localStorage.getItem('crosswise_labels') || '{}');
-const pretty = c => c.replace('sf_streets_cam-', 'SF crossing ').replace('nyc_streets_cam-', 'NYC crossing ');
+const pretty = c => c.replace('sf_streets_cam-', 'San Francisco · Crossing ').replace('nyc_streets_cam-', 'New York · Crossing ');
+async function post(body) {
+  const r = await fetch(BASE + 'api/labels', { method: 'POST', headers: { 'Content-Type': 'application/json' }, body: JSON.stringify(body) });
+  return r.json();
+}
 async function init() {
   items = await (await fetch(BASE + 'api/label-set')).json();
   const server = await (await fetch(BASE + 'api/labels')).json().catch(() => ({}));
+  const ids = new Set(items.map(x => x.segment_id));
+  // Server storage is ephemeral (pod restarts wipe it); push back anything only this browser remembers.
+  const missing = Object.fromEntries(Object.entries(labels).filter(([k, v]) => ids.has(k) && v && !server[k]));
   labels = { ...labels, ...server };
+  if (Object.keys(missing).length) {
+    try { const j = await post(missing); $('save').textContent = `restored ${Object.keys(missing).length} · ${j.total}/${items.length} on server`; }
+    catch (e) { $('save').textContent = 'server unreachable — kept locally'; }
+  }
   const firstOpen = items.findIndex(x => !labels[x.segment_id]);
   show(firstOpen < 0 ? 0 : firstOpen);
 }
@@ -62,7 +82,7 @@ function show(k) {
   const it = items[i];
   const src = BASE + 'video?source=' + encodeURIComponent(it.segment_id);
   if (!$('v').src.endsWith(encodeURIComponent(it.segment_id))) $('v').src = src;
-  $('pos').textContent = `Segment ${i + 1} of ${items.length}`;
+  $('pos').textContent = `Moment ${i + 1} of ${items.length}`;
   $('cam').textContent = pretty(it.camera_id);
   $('bs').classList.toggle('sel', labels[it.segment_id] === 'safe');
   $('bu').classList.toggle('sel', labels[it.segment_id] === 'unsafe');
@@ -75,10 +95,8 @@ async function mark(v) {
   const id = items[i].segment_id;
   labels[id] = v; localStorage.setItem('crosswise_labels', JSON.stringify(labels));
   $('save').textContent = 'saving…';
-  try {
-    const r = await fetch(BASE + 'api/labels', { method: 'POST', headers: { 'Content-Type': 'application/json' }, body: JSON.stringify({ [id]: v }) });
-    const j = await r.json(); $('save').textContent = `saved · ${j.total}/${items.length} on server`;
-  } catch (e) { $('save').textContent = 'saved locally (server unreachable)'; }
+  try { const j = await post({ [id]: v }); $('save').textContent = `saved · ${j.total}/${items.length} on server`; }
+  catch (e) { $('save').textContent = 'saved locally (server unreachable)'; }
   const nextOpen = items.findIndex((x, k) => k > i && !labels[x.segment_id]);
   show(nextOpen >= 0 ? nextOpen : i);
 }

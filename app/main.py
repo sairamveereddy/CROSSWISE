@@ -51,6 +51,7 @@ CAPTIONS = {r["source"]: TAG_RE.sub("", r["caption"]).strip()
             for r in json.loads(_find("cosmos_captions.json").read_text())}
 INDEX_HTML = (HERE / "index.html").read_bytes()
 LABEL_HTML = (HERE / "label.html").read_bytes()
+LOGO = (HERE / "logo.jpg").read_bytes() if (HERE / "logo.jpg").exists() else b""
 try:
     LABEL_SET = json.loads(_find("label_set.json").read_text())
 except FileNotFoundError:
@@ -171,6 +172,8 @@ class Handler(BaseHTTPRequestHandler):
         try:
             if url.path in ("/", "/index.html"):
                 return self._send(200, INDEX_HTML, "text/html; charset=utf-8")
+            if url.path == "/logo.jpg":
+                return self._send(200, LOGO, "image/jpeg", {"Cache-Control": "public, max-age=86400"})
             if url.path in ("/label", "/label/", "/label.html"):
                 return self._send(200, LABEL_HTML, "text/html; charset=utf-8")
             if url.path == "/api/label-set":
