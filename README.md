@@ -56,7 +56,16 @@ flowchart LR
      same-city crossing suggested), otherwise **REMOTE_OPERATOR** (unclear evidence, no safe traffic gap, or long signal wait).
    - **Crossing scorecard per camera:** share of GO time, mean wait before a GO, turning-vehicle hazards, NO-GO share,
      escalations. Difficulty 0–100 = 50% time without GO + 20% NO-GO share + 20% mean wait (capped 30 s) + 10% turning rate.
-5. **App** (`app/`): stdlib Python backend + one HTML page (Chart.js from CDN), deployed with `python:3.12-slim`, code from
+5. **Frame-level perception** (`perceive.py`): the 5 s segment decision is too coarse to catch the moment the walk phase
+   opens, so for the demo clips we also read the YOLO11 boxes VAST stores for every frame, sample them at 5 fps, track
+   vehicles and pedestrians across frames (IoU + centre matching, smoothed velocity) and decide every 0.2 s:
+   **NO-GO** if a vehicle is moving through the crossing zone (calibrated per fixed camera), **GO** once pedestrians have
+   been crossing for 0.6 s (or a walk signal was read) and no vehicle has moved through the zone for 0.6 s, otherwise
+   **WAIT**. The app runs a robot state machine on these moments (curb → crossing → yield if a vehicle enters → across;
+   escalate after N×5 s at the curb; a REROUTE ends the attempt), so the robot starts rolling ~0.4 s after the walk phase
+   becomes visible. We tried asking Cosmos Reason for a per-second signal state; it answered "walk" for every second of
+   every segment, so the moment layer is motion-based by design.
+6. **App** (`app/`): stdlib Python backend + one HTML page (Chart.js from CDN), deployed with `python:3.12-slim`, code from
    a ConfigMap, VSS credentials from a Secret, Ingress `/app`. Video is proxied with HTTP Range support; the JWT never
    reaches the browser. Features: player with live GO/WAIT/NO-GO badge, reasons and evidence, decision timeline with a
    tiny robot riding the playhead, escalation banner, **replay mode** (steps through a clip as if live, labelled REPLAY),
@@ -73,6 +82,7 @@ crosswise/
   caption.py           direct Cosmos Reason captioning -> data/cosmos_captions.json
   decide.py            decision engine -> data/decisions.json + VastDB + Weave
   agent.py             stuck detection + scorecard -> data/agent_output.json
+  perceive.py          5 fps tracks + moment-level GO/WAIT/NO-GO from stored YOLO boxes -> data/perception.json
   evaluate.py          label-set selection + human-eval scoring + W&B run
   app/main.py          web backend (stdlib)      app/index.html  UI      app/label.html  labelling UI
   deploy/k8s.yaml      Deployment + Service + Ingress (no secrets)      deploy/deploy.sh
@@ -104,6 +114,7 @@ python reingest.py                                         # optional: DataEngin
 python caption.py                                          # Cosmos Reason captions for the demo clips
 python decide.py                                           # decisions for demo clips + 5 clips per street camera
 python agent.py --n 4                                      # escalations + scorecard
+python perceive.py                                         # per-frame tracks + moment decisions for the demo clips
 ./deploy/deploy.sh                                         # web app at /app (open via the workshop App button)
 python evaluate.py select                                  # pick 20 segments for blind labelling
 #   label them at /app/label, then:
@@ -145,6 +156,9 @@ Unsafe GOs (GO where the human said unsafe) are the critical error and are repor
 - **Index captions are weaker than our crossing captions.** Scorecard clips use the original index captions, which rarely
   mention signal state (none in ~48% of segments) or turning vehicles, so turning hazards are under-counted outside the demo
   clips and NO-GO is over-represented ("vehicles moving over the crosswalk").
+- **Walk phase is inferred, not read off the signal head.** Moment-level GO comes from pedestrians crossing while traffic
+  is stopped; crossing zones are hand-calibrated per camera, and people walking along a sidewalk near the zone can be
+  mistaken for crossers. Only the three demo clips have per-frame tracks.
 - **Short clips:** chunks are 30 s, so "wait before GO" is a lower bound (streaks that never reach a GO count at their observed length).
 - **Scorecard sample:** 5–6 clips per camera; the ranking is directional.
 - **Re-ingest:** the shared DataEngine pipeline was replaying a backlog during the event, so crossing captions were produced by

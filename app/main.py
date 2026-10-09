@@ -49,6 +49,10 @@ TAG_RE = re.compile(r"\s*\b(SIGNAL|VEHICLES|PEDS|BLOCKED|CROSS)\s*=\s*<?[a-z\-]+
 DECISIONS = json.loads(_find("decisions.json").read_text())
 CAPTIONS = {r["source"]: TAG_RE.sub("", r["caption"]).strip()
             for r in json.loads(_find("cosmos_captions.json").read_text())}
+try:
+    PERCEPTION = json.loads(_find("perception.json").read_text())
+except FileNotFoundError:
+    PERCEPTION = {}
 INDEX_HTML = (HERE / "index.html").read_bytes()
 LABEL_HTML = (HERE / "label.html").read_bytes()
 LOGO = (HERE / "logo.jpg").read_bytes() if (HERE / "logo.jpg").exists() else b""
@@ -116,7 +120,7 @@ def timeline(video, n):
         out.append({k: s.get(k) for k in ("segment_id", "segment_number", "start_sec", "end_sec", "decision",
                                           "llm_decision", "unclear", "signal", "hazards", "reasons", "confidence",
                                           "yolo", "cosmos_tags", "caption_source", "model")}
-                   | {"caption": CAPTIONS.get(s["segment_id"])})
+                   | {"caption": CAPTIONS.get(s["segment_id"]), "perception": PERCEPTION.get(s["segment_id"])})
     return {"video": video, "camera_id": segs[0]["camera_id"], "location": segs[0].get("location"), "n": n,
             "segments": out, "escalations": agent.detect_stuck(segs, n, alt)}
 
