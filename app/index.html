@@ -103,7 +103,14 @@ select { appearance:none; -webkit-appearance:none; background:var(--fill) url("d
          color:var(--text); border:0; border-radius:9px; padding:7px 32px 7px 12px; font:500 13px var(--font); margin-left:auto; max-width:320px; }
 
 /* timeline */
-.tlwrap { position:relative; margin-top:44px; }
+.tlwrap { position:relative; margin-top:10px; }
+.lane { position:relative; height:62px; margin-bottom:8px; }
+.lane .road { position:absolute; left:7%; right:7%; top:30px; height:14px; border-radius:7px; background:repeating-linear-gradient(90deg,rgba(229,229,234,.55) 0 9px,#1c1c1e 9px 17px); }
+.lane .cl, .lane .cr { position:absolute; top:48px; font-size:10.5px; font-weight:600; letter-spacing:.06em; color:var(--ter); }
+.lane .cl { left:0; } .lane .cr { right:0; } .lane .cr b { color:var(--green); }
+.lane .lst { position:absolute; left:50%; transform:translateX(-50%); top:48px; font-size:11px; font-weight:600; }
+.lane .rider { top:0; }
+.rider.go svg { animation:roll .35s ease-in-out infinite; }
 .tl { display:flex; gap:4px; height:34px; cursor:pointer; }
 .sg { flex:1; border-radius:10px; display:grid; place-items:center; font-size:11px; font-weight:700; letter-spacing:.04em; color:rgba(0,0,0,.72); transition:transform .2s, opacity .3s; }
 .sg:hover { transform:translateY(-2px); }
@@ -259,7 +266,8 @@ footer b { color:var(--sub); font-weight:500; }
         <button id="bigplay" class="bigplay" aria-label="Play">▶</button>
       </div>
       <div class="tlwrap">
-        <div id="rider" class="rider"><span class="q">?</span><svg viewBox="0 0 64 60" width="38" height="36"><use href="#robotSide"/></svg></div>
+        <div class="lane"><div class="road"></div><span class="cl">CURB</span><span class="cr">OTHER SIDE · <b id="crossN">0</b> crossed</span><span id="laneSt" class="lst"></span>
+          <div id="rider" class="rider"><span class="q">?</span><svg viewBox="0 0 64 60" width="38" height="36"><use href="#robotSide"/></svg></div></div>
         <div id="tl" class="tl"></div>
         <canvas id="ms" class="ms"></canvas>
       </div>
@@ -363,8 +371,10 @@ const $ = id => document.getElementById(id);
 const COL = { 'GO':'#30d158', 'WAIT':'#ff9f0a', 'NO-GO':'#ff453a' };
 const V = [$('vA'), $('vB')];
 const ARRIVE_S = 1.6, PREDICT_S = 1.5, SIGNAL_MAX_S = 90, PATH_HZ = ['blocked_crosswalk', 'construction'];
+// the one crosswalk the robot uses on each camera (near curb -> far curb, fractions of the frame); other crosswalks in view are ignored
+const ROUTES = { 'sf_streets_cam-4': [[.03, .74], [.97, .70]], 'sf_streets_cam-1': [[.13, .80], [.42, .57]], 'nyc_streets_cam-1': [[.80, .97], [.70, .58]] };
 const SIG = { walk: 'WALK', dont_walk: "DON'T WALK", flashing: 'COUNTDOWN', none: 'no signal in view' };
-let T = null, M = [], F = [], R = [], ESC = [], Z = null, SEGD = [];
+let T = null, M = [], F = [], R = [], ESC = [], ACROSS = [], Z = null, SEGD = [];
 let idx = 0, act = 0, mode = 'review', chart = null, adhoc = false, N = 4, showDet = true;
 let lastSeg = null, lastMi = -1, lastRobotKey = '';
 const esc = s => String(s ?? '').replace(/[&<>"]/g, c => ({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;'}[c]));
@@ -406,7 +416,7 @@ async function loadClips() {
   $('clip').innerHTML = clips.map(c => `<option value="${esc(c.video)}">${c.demo ? '★ ' : ''}${esc(short(c.camera_id))} · …${esc(c.name.replace('.mp4', '').slice(-14))} · GO ${c.go}/${c.segments}</option>`).join('');
   const demo = clips.filter(c => c.demo);
   const tls = await Promise.all(demo.map(c => api(`api/timeline?video=${encodeURIComponent(c.video)}&n=${N}`)));
-  const order = ['chunk_0022', 'chunk_0029', 'sf4_', 'sf1_', 'chunk_0021'];
+  const order = ['sf4_', 'chunk_0029', 'chunk_0022', 'sf1_', 'chunk_0021'];
   const rank = c => { const k = order.findIndex(o => c.video.includes(o)); return k < 0 ? 99 : k; };
   const items = demo.map((c, k) => ({ c, t: tls[k] })).sort((a, b) => rank(a.c) - rank(b.c));
   $('tiles').innerHTML = items.map(({ c, t }) => {
@@ -463,12 +473,12 @@ function segDecisions(tl, M) {
 function simulate(tl) {
   const { M, F, zone } = flatten(tl);
   const crossS = zone?.cross_s || 3.0;
-  const R = [], ESC = [];
+  const R = [], ESC = [], ACROSS = [];
   let st = 'curb', p = 0, since = M[0]?.t || 0, arrived = 0, walkLit = null, fired = false, reaction = null;
   M.forEach((m, i) => {
     if (st === 'reroute') { R.push({ st, p: 0, stuck: m.t - since, esc: ESC.at(-1), reaction: null, crossS }); return; }
     const dt = i ? m.t - M[i - 1].t : 0;
-    if (st === 'crossing') { p += dt / crossS; if (p >= 1) { p = 1; st = 'across'; arrived = m.t; } }
+    if (st === 'crossing') { p += dt / crossS; if (p >= 1) { p = 1; st = 'across'; arrived = m.t; ACROSS.push(m.t); } }
     else if (st === 'across' && m.t - arrived >= ARRIVE_S) { st = 'curb'; p = 0; since = m.t; fired = false; reaction = null; }
     const lamp = F[i]?.h?.[4];
     if (lamp === 'walk') { if (walkLit === null) walkLit = m.t; } else if (lamp === 'hand') walkLit = null;
@@ -489,7 +499,7 @@ function simulate(tl) {
     }
     R.push({ st, p, stuck, held, crossS, esc: (st === 'curb' || st === 'reroute') && fired ? ESC.at(-1) : null, reaction });
   });
-  return { M, F, R, ESC, zone, SEGD: segDecisions(tl, M) };
+  return { M, F, R, ESC, ACROSS, zone, SEGD: segDecisions(tl, M) };
 }
 
 function makeEsc(tl, M, since, m) {
@@ -508,7 +518,7 @@ function makeEsc(tl, M, since, m) {
 
 async function loadClip(v, at = 0) {
   T = await api(`api/timeline?video=${encodeURIComponent(v)}&n=${N}`); adhoc = false;
-  ({ M, F, R, ESC, zone: Z, SEGD } = simulate(T));
+  ({ M, F, R, ESC, ACROSS, zone: Z, SEGD } = simulate(T));
   lastSeg = null; lastMi = -1; lastRobotKey = '';
   $('clip').value = v;
   document.querySelectorAll('.tile').forEach(t => t.classList.toggle('on', t.dataset.v === v));
@@ -534,9 +544,22 @@ function render(force = false) {
   if (force || seg !== lastSeg) { lastSeg = seg; showSegment(seg); }
   drawOverlay(t, mi);
   updateRobot(t, mi);
-  const end = T.segments.at(-1).end_sec;
-  $('rider').style.left = `${Math.min(100, t / end * 100)}%`;
+  // lane under the video: the robot leaves the curb only on GO and drives across while crossing
+  const p = robotProgress(t, mi);
+  $('rider').style.left = `${7 + p * 86}%`;
   $('rider').classList.toggle('wobble', r.st === 'curb');
+  $('rider').classList.toggle('go', r.st === 'crossing');
+  $('crossN').textContent = ACROSS.filter(a => a <= t).length;
+  const ls = r.st === 'crossing' ? ['CROSSING', 'var(--green)'] : r.st === 'yield' ? ['YIELDING', 'var(--red)'] : r.st === 'across' ? ['ACROSS ✓', 'var(--green)']
+    : r.st === 'reroute' ? ['REROUTING', 'var(--orange)'] : m.d === 'NO-GO' ? ['NO-GO · HOLDING', 'var(--red)'] : ['WAITING AT CURB', 'var(--orange)'];
+  $('laneSt').textContent = ls[0]; $('laneSt').style.color = ls[1];
+}
+
+function robotProgress(t, mi) {
+  const m = M[mi], r = R[mi];
+  if (!r) return 0;
+  if (r.st === 'crossing') return Math.min(1, r.p + (t - m.t) / r.crossS);
+  return r.st === 'curb' || r.st === 'reroute' ? 0 : r.p;
 }
 
 function drawTimeline(t) {
@@ -680,6 +703,27 @@ function drawOverlay(t, mi) {
   if (fr.h) {
     const hc = { walk: '#f5f5f7', hand: '#ff453a', dark: '#8e8e93' }[fr.h[4]];
     box(fr.h, hc, 2.5, { walk: 'WALK', hand: "DON'T WALK", dark: 'lamp off' }[fr.h[4]]);
+  }
+  // the robot's crosswalk, with the robot on it: it only moves along the line while crossing
+  const route = ROUTES[T.camera_id], r = R[mi];
+  if (route && r) {
+    const [[ax, ay], [bx, by]] = route, A = [ax * w, ay * h], B = [bx * w, by * h];
+    const col = r.st === 'crossing' || r.st === 'across' ? '#30d158' : r.st === 'yield' || M[mi].d === 'NO-GO' ? '#ff453a' : '#ff9f0a';
+    g.strokeStyle = 'rgba(0,0,0,.55)'; g.lineWidth = 9; g.lineCap = 'round';
+    g.beginPath(); g.moveTo(...A); g.lineTo(...B); g.stroke();
+    g.strokeStyle = col; g.lineWidth = 4; g.setLineDash([12, 8]);
+    g.beginPath(); g.moveTo(...A); g.lineTo(...B); g.stroke(); g.setLineDash([]);
+    const ang = Math.atan2(B[1] - A[1], B[0] - A[0]);
+    g.fillStyle = col; g.beginPath(); g.moveTo(...B);
+    g.lineTo(B[0] - 14 * Math.cos(ang - .5), B[1] - 14 * Math.sin(ang - .5)); g.lineTo(B[0] - 14 * Math.cos(ang + .5), B[1] - 14 * Math.sin(ang + .5)); g.fill();
+    const p = robotProgress(t, mi), X = A[0] + (B[0] - A[0]) * p, Y = A[1] + (B[1] - A[1]) * p;
+    g.fillStyle = '#f2f2f7'; g.strokeStyle = col; g.lineWidth = 3;
+    g.beginPath(); g.roundRect ? g.roundRect(X - 11, Y - 13, 22, 26, 6) : g.rect(X - 11, Y - 13, 22, 26); g.fill(); g.stroke();
+    g.fillStyle = col; g.beginPath(); g.arc(X - 4, Y - 6, 2.4, 0, 7); g.arc(X + 4, Y - 6, 2.4, 0, 7); g.fill();
+    const lab = `ROBOT'S CROSSWALK · ${r.st === 'crossing' ? 'CROSSING' : r.st === 'across' ? 'ACROSS ✓' : r.st === 'yield' ? 'YIELDING' : 'WAITING'}`;
+    const tw = g.measureText(lab).width + 12, lx = Math.min(w - tw - 6, Math.max(6, A[0] - tw / 2)), ly = Math.min(h - 22, A[1] + 14);
+    g.fillStyle = col; g.beginPath(); g.roundRect ? g.roundRect(lx, ly - 12, tw, 17, 5) : g.rect(lx, ly - 12, tw, 17); g.fill();
+    g.fillStyle = '#000'; g.fillText(lab, lx + 6, ly + 1);
   }
 }
 
@@ -858,7 +902,7 @@ $('clip').onchange = e => { setMode('review'); loadClip(e.target.value); };
 $('tiles').onclick = e => { const t = e.target.closest('.tile'); if (t) { setMode('review'); loadClip(t.dataset.v); } };
 function setN(n) {
   N = Math.max(2, Math.min(12, n)); $('nVal').textContent = N * 5;
-  if (T && !adhoc) { ({ M, F, R, ESC, zone: Z, SEGD } = simulate(T)); lastRobotKey = ''; render(true); }
+  if (T && !adhoc) { ({ M, F, R, ESC, ACROSS, zone: Z, SEGD } = simulate(T)); lastRobotKey = ''; render(true); }
   loadCard();
 }
 $('nMinus').onclick = () => setN(N - 1); $('nPlus').onclick = () => setN(N + 1);
