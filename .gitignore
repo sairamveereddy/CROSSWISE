@@ -12,3 +12,4 @@ __pycache__/
 *.log
 # raw phase-1 search dumps (contain index captions that describe individuals)
 data/phase1_*.json
+cache/

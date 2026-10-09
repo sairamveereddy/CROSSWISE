@@ -1,0 +1,488 @@
+{
+ "s3://team-48-vss-chunks-segments/segments/20261001_101322_sf4_chunk_0015_segment_001_of_006.mp4": {
+  "obstacles": [],
+  "free": [
+   0.0,
+   1.0
+  ],
+  "passable": true,
+  "model": "google/gemma-4-31B-it"
+ },
+ "s3://team-48-vss-chunks-segments/segments/20261001_101322_sf4_chunk_0015_segment_002_of_006.mp4": {
+  "obstacles": [],
+  "free": [
+   0.0,
+   1.0
+  ],
+  "passable": true,
+  "model": "google/gemma-4-31B-it"
+ },
+ "s3://team-48-vss-chunks-segments/segments/20261001_101322_sf4_chunk_0015_segment_003_of_006.mp4": {
+  "obstacles": [
+   {
+    "type": "stopped_vehicle",
+    "x0": 0.17,
+    "x1": 0.66
+   }
+  ],
+  "free": [
+   0.66,
+   1.0
+  ],
+  "passable": true,
+  "model": "google/gemma-4-31B-it"
+ },
+ "s3://team-48-vss-chunks-segments/segments/20261001_101322_sf4_chunk_0015_segment_004_of_006.mp4": {
+  "obstacles": [],
+  "free": [
+   0.0,
+   1.0
+  ],
+  "passable": true,
+  "model": "google/gemma-4-31B-it"
+ },
+ "s3://team-48-vss-chunks-segments/segments/20261001_101322_sf4_chunk_0015_segment_005_of_006.mp4": {
+  "obstacles": [],
+  "free": [
+   0.0,
+   1.0
+  ],
+  "passable": true,
+  "model": "google/gemma-4-31B-it"
+ },
+ "s3://team-48-vss-chunks-segments/segments/20261001_101322_sf4_chunk_0015_segment_006_of_006.mp4": {
+  "obstacles": [],
+  "free": [
+   0.0,
+   1.0
+  ],
+  "passable": true,
+  "model": "google/gemma-4-31B-it"
+ },
+ "s3://team-48-vss-chunks-segments/segments/20261001_094630_sf1_chunk_0013_segment_001_of_006.mp4": {
+  "obstacles": [],
+  "free": [
+   0.0,
+   1.0
+  ],
+  "passable": true,
+  "model": "google/gemma-4-31B-it"
+ },
+ "s3://team-48-vss-chunks-segments/segments/20261001_094630_sf1_chunk_0013_segment_002_of_006.mp4": {
+  "obstacles": [
+   {
+    "type": "stopped_vehicle",
+    "x0": 0.388,
+    "x1": 0.691
+   }
+  ],
+  "free": [
+   0.0,
+   0.388
+  ],
+  "passable": true,
+  "model": "google/gemma-4-31B-it"
+ },
+ "s3://team-48-vss-chunks-segments/segments/20261001_094630_sf1_chunk_0013_segment_003_of_006.mp4": {
+  "obstacles": [],
+  "free": [
+   0.1,
+   0.4
+  ],
+  "passable": true,
+  "model": "google/gemma-4-31B-it"
+ },
+ "s3://team-48-vss-chunks-segments/segments/20261001_094630_sf1_chunk_0013_segment_004_of_006.mp4": {
+  "obstacles": [
+   {
+    "type": "stopped_vehicle",
+    "x0": 0.388,
+    "x1": 0.688
+   }
+  ],
+  "free": [
+   0.15,
+   0.388
+  ],
+  "passable": true,
+  "model": "google/gemma-4-31B-it"
+ },
+ "s3://team-48-vss-chunks-segments/segments/20261001_094630_sf1_chunk_0013_segment_005_of_006.mp4": {
+  "obstacles": [],
+  "free": [
+   0.0,
+   1.0
+  ],
+  "passable": true,
+  "model": "google/gemma-4-31B-it"
+ },
+ "s3://team-48-vss-chunks-segments/segments/20261001_094630_sf1_chunk_0013_segment_006_of_006.mp4": {
+  "obstacles": [],
+  "free": [
+   0.0,
+   1.0
+  ],
+  "passable": true,
+  "model": "google/gemma-4-31B-it"
+ },
+ "s3://team-48-vss-chunks-segments/segments/20261008_065653_VID_20261006_171812_002_chunk_0029_segment_001_of_006.mp4": {
+  "obstacles": [
+   {
+    "type": "cone",
+    "x0": 0.28,
+    "x1": 0.33
+   },
+   {
+    "type": "barrier",
+    "x0": 0.44,
+    "x1": 0.61
+   }
+  ],
+  "free": [
+   0.61,
+   0.98
+  ],
+  "passable": true,
+  "model": "google/gemma-4-31B-it"
+ },
+ "s3://team-48-vss-chunks-segments/segments/20261008_065653_VID_20261006_171812_002_chunk_0029_segment_002_of_006.mp4": {
+  "obstacles": [
+   {
+    "type": "cone",
+    "x0": 0.258,
+    "x1": 0.338
+   },
+   {
+    "type": "barrier",
+    "x0": 0.445,
+    "x1": 0.621
+   }
+  ],
+  "free": [
+   0.621,
+   0.99
+  ],
+  "passable": true,
+  "model": "google/gemma-4-31B-it"
+ },
+ "s3://team-48-vss-chunks-segments/segments/20261008_065653_VID_20261006_171812_002_chunk_0029_segment_003_of_006.mp4": {
+  "obstacles": [
+   {
+    "type": "cone",
+    "x0": 0.25,
+    "x1": 0.33
+   },
+   {
+    "type": "barrier",
+    "x0": 0.44,
+    "x1": 0.62
+   }
+  ],
+  "free": [
+   0.62,
+   1.0
+  ],
+  "passable": true,
+  "model": "google/gemma-4-31B-it"
+ },
+ "s3://team-48-vss-chunks-segments/segments/20261008_065653_VID_20261006_171812_002_chunk_0029_segment_004_of_006.mp4": {
+  "obstacles": [
+   {
+    "type": "cone",
+    "x0": 0.25,
+    "x1": 0.34
+   },
+   {
+    "type": "barrier",
+    "x0": 0.0,
+    "x1": 0.29
+   }
+  ],
+  "free": [
+   0.34,
+   1.0
+  ],
+  "passable": true,
+  "model": "google/gemma-4-31B-it"
+ },
+ "s3://team-48-vss-chunks-segments/segments/20261008_065653_VID_20261006_171812_002_chunk_0029_segment_005_of_006.mp4": {
+  "obstacles": [
+   {
+    "type": "cone",
+    "x0": 0.255,
+    "x1": 0.335
+   },
+   {
+    "type": "barrier",
+    "x0": 0.448,
+    "x1": 0.622
+   }
+  ],
+  "free": [
+   0.622,
+   0.98
+  ],
+  "passable": true,
+  "model": "google/gemma-4-31B-it"
+ },
+ "s3://team-48-vss-chunks-segments/segments/20261008_065653_VID_20261006_171812_002_chunk_0029_segment_006_of_006.mp4": {
+  "obstacles": [
+   {
+    "type": "cone",
+    "x0": 0.257,
+    "x1": 0.338
+   },
+   {
+    "type": "barrier",
+    "x0": 0.436,
+    "x1": 0.621
+   }
+  ],
+  "free": [
+   0.621,
+   1.0
+  ],
+  "passable": true,
+  "model": "google/gemma-4-31B-it"
+ },
+ "s3://team-48-vss-chunks-segments/segments/20261008_065328_VID_20261006_171812_002_chunk_0021_segment_001_of_006.mp4": {
+  "obstacles": [
+   {
+    "type": "cone",
+    "x0": 0.248,
+    "x1": 0.341
+   },
+   {
+    "type": "barrier",
+    "x0": 0.422,
+    "x1": 0.601
+   }
+  ],
+  "free": [
+   0.601,
+   0.998
+  ],
+  "passable": true,
+  "model": "google/gemma-4-31B-it"
+ },
+ "s3://team-48-vss-chunks-segments/segments/20261008_065328_VID_20261006_171812_002_chunk_0021_segment_002_of_006.mp4": {
+  "obstacles": [
+   {
+    "type": "barrier",
+    "x0": 0.42,
+    "x1": 0.61
+   }
+  ],
+  "free": [
+   0.61,
+   1.0
+  ],
+  "passable": true,
+  "model": "google/gemma-4-31B-it"
+ },
+ "s3://team-48-vss-chunks-segments/segments/20261008_065328_VID_20261006_171812_002_chunk_0021_segment_003_of_006.mp4": {
+  "obstacles": [
+   {
+    "type": "cone",
+    "x0": 0.25,
+    "x1": 0.33
+   },
+   {
+    "type": "barrier",
+    "x0": 0.42,
+    "x1": 0.61
+   }
+  ],
+  "free": [
+   0.61,
+   1.0
+  ],
+  "passable": true,
+  "model": "google/gemma-4-31B-it"
+ },
+ "s3://team-48-vss-chunks-segments/segments/20261008_065328_VID_20261006_171812_002_chunk_0021_segment_004_of_006.mp4": {
+  "obstacles": [
+   {
+    "type": "cone",
+    "x0": 0.25,
+    "x1": 0.33
+   },
+   {
+    "type": "barrier",
+    "x0": 0.42,
+    "x1": 0.61
+   }
+  ],
+  "free": [
+   0.61,
+   0.98
+  ],
+  "passable": true,
+  "model": "google/gemma-4-31B-it"
+ },
+ "s3://team-48-vss-chunks-segments/segments/20261008_065328_VID_20261006_171812_002_chunk_0021_segment_005_of_006.mp4": {
+  "obstacles": [
+   {
+    "type": "cone",
+    "x0": 0.25,
+    "x1": 0.34
+   },
+   {
+    "type": "barrier",
+    "x0": 0.4,
+    "x1": 0.61
+   }
+  ],
+  "free": [
+   0.61,
+   1.0
+  ],
+  "passable": true,
+  "model": "google/gemma-4-31B-it"
+ },
+ "s3://team-48-vss-chunks-segments/segments/20261008_065328_VID_20261006_171812_002_chunk_0021_segment_006_of_006.mp4": {
+  "obstacles": [
+   {
+    "type": "cone",
+    "x0": 0.25,
+    "x1": 0.33
+   },
+   {
+    "type": "barrier",
+    "x0": 0.42,
+    "x1": 0.61
+   }
+  ],
+  "free": [
+   0.61,
+   0.95
+  ],
+  "passable": true,
+  "model": "google/gemma-4-31B-it"
+ },
+ "s3://team-48-vss-chunks-segments/segments/20261008_065354_VID_20261006_171812_002_chunk_0022_segment_001_of_006.mp4": {
+  "obstacles": [
+   {
+    "type": "cone",
+    "x0": 0.251,
+    "x1": 0.331
+   },
+   {
+    "type": "barrier",
+    "x0": 0.445,
+    "x1": 0.603
+   }
+  ],
+  "free": [
+   0.603,
+   0.998
+  ],
+  "passable": true,
+  "model": "google/gemma-4-31B-it"
+ },
+ "s3://team-48-vss-chunks-segments/segments/20261008_065354_VID_20261006_171812_002_chunk_0022_segment_002_of_006.mp4": {
+  "obstacles": [
+   {
+    "type": "cone",
+    "x0": 0.25,
+    "x1": 0.33
+   },
+   {
+    "type": "barrier",
+    "x0": 0.42,
+    "x1": 0.6
+   },
+   {
+    "type": "barrier",
+    "x0": 0.0,
+    "x1": 0.28
+   }
+  ],
+  "free": [
+   0.6,
+   1.0
+  ],
+  "passable": true,
+  "model": "google/gemma-4-31B-it"
+ },
+ "s3://team-48-vss-chunks-segments/segments/20261008_065354_VID_20261006_171812_002_chunk_0022_segment_003_of_006.mp4": {
+  "obstacles": [
+   {
+    "type": "cone",
+    "x0": 0.248,
+    "x1": 0.333
+   },
+   {
+    "type": "barrier",
+    "x0": 0.416,
+    "x1": 0.608
+   }
+  ],
+  "free": [
+   0.608,
+   0.998
+  ],
+  "passable": true,
+  "model": "google/gemma-4-31B-it"
+ },
+ "s3://team-48-vss-chunks-segments/segments/20261008_065354_VID_20261006_171812_002_chunk_0022_segment_004_of_006.mp4": {
+  "obstacles": [
+   {
+    "type": "cone",
+    "x0": 0.251,
+    "x1": 0.328
+   },
+   {
+    "type": "barrier",
+    "x0": 0.447,
+    "x1": 0.603
+   }
+  ],
+  "free": [
+   0.603,
+   1.0
+  ],
+  "passable": true,
+  "model": "google/gemma-4-31B-it"
+ },
+ "s3://team-48-vss-chunks-segments/segments/20261008_065354_VID_20261006_171812_002_chunk_0022_segment_005_of_006.mp4": {
+  "obstacles": [
+   {
+    "type": "cone",
+    "x0": 0.248,
+    "x1": 0.335
+   },
+   {
+    "type": "barrier",
+    "x0": 0.411,
+    "x1": 0.608
+   }
+  ],
+  "free": [
+   0.608,
+   0.998
+  ],
+  "passable": true,
+  "model": "google/gemma-4-31B-it"
+ },
+ "s3://team-48-vss-chunks-segments/segments/20261008_065354_VID_20261006_171812_002_chunk_0022_segment_006_of_006.mp4": {
+  "obstacles": [
+   {
+    "type": "cone",
+    "x0": 0.24,
+    "x1": 0.33
+   },
+   {
+    "type": "barrier",
+    "x0": 0.44,
+    "x1": 0.61
+   }
+  ],
+  "free": [
+   0.61,
+   1.0
+  ],
+  "passable": true,
+  "model": "google/gemma-4-31B-it"
+ }
+}

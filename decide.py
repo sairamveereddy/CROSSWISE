@@ -186,14 +186,23 @@ def main():
     ap.add_argument("--sample-per-camera", type=int, default=30)
     ap.add_argument("--demo-only", action="store_true")
     ap.add_argument("--no-vastdb", action="store_true")
+    ap.add_argument("--videos", nargs="+", help="decide only these captioned clips and merge into decisions.json")
     args = ap.parse_args()
 
     weave.init(f"{os.environ['WANDB_TEAM']}/{os.environ['WANDB_PROJECT']}")
-    segments = demo_segments() + ([] if args.demo_only else sample_segments(args.sample_per_camera))
+    if args.videos:
+        segments = [s for s in demo_segments() if s["original_video"] in set(args.videos)]
+    else:
+        segments = demo_segments() + ([] if args.demo_only else sample_segments(args.sample_per_camera))
     run_id = f"run-{dt.datetime.now(dt.timezone.utc):%Y%m%d-%H%M%S}-{uuid.uuid4().hex[:4]}"
     print(f"{run_id}: deciding {len(segments)} segments with {args.model}")
     rows = run(segments, Engine(args.model), run_id)
-    (DATA / "decisions.json").write_text(json.dumps(rows, indent=1))
+    if args.videos:
+        new = {r["segment_id"] for r in rows}
+        old = [r for r in json.loads((DATA / "decisions.json").read_text()) if r["segment_id"] not in new]
+        (DATA / "decisions.json").write_text(json.dumps(old + rows, indent=1))
+    else:
+        (DATA / "decisions.json").write_text(json.dumps(rows, indent=1))
     if not args.no_vastdb:
         write_vastdb(rows)
         print(f"wrote {len(rows)} rows to {os.environ['VASTDB_BUCKET']}/hackathon/crossing_decisions")

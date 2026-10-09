@@ -8163,5 +8163,501 @@
   "confidence": 0.8,
   "model": "meta-llama/Llama-3.3-70B-Instruct",
   "created_at": "2026-10-09T17:30:45+00:00"
+ },
+ {
+  "run_id": "run-20261009-190545-fba2",
+  "segment_id": "s3://team-48-vss-chunks-segments/segments/20261008_065328_VID_20261006_171812_002_chunk_0021_segment_001_of_006.mp4",
+  "original_video": "s3://team-48-vss-chunks/team-48/20261008_065328_VID_20261006_171812_002_chunk_0021.mp4",
+  "camera_id": "nyc_streets_cam-1",
+  "location": "new_york",
+  "segment_number": 1,
+  "start_sec": 0.0,
+  "end_sec": 5.0,
+  "caption_source": "cosmos_reason_direct",
+  "cosmos_tags": {
+   "signal": "green",
+   "vehicles": "moving",
+   "peds": "crossing",
+   "blocked": "yes",
+   "cross": "go"
+  },
+  "yolo": {
+   "person": 14,
+   "car": 4,
+   "traffic light": 2,
+   "bicycle": 1,
+   "truck": 2,
+   "vehicles_total": 6
+  },
+  "decision": "WAIT",
+  "llm_decision": "WAIT",
+  "unclear": false,
+  "signal": "green",
+  "hazards": [
+   "moving_traffic",
+   "blocked_crosswalk"
+  ],
+  "reasons": [
+   "green light",
+   "pedestrians crossing",
+   "partial blockage"
+  ],
+  "confidence": 0.7,
+  "model": "meta-llama/Llama-3.3-70B-Instruct",
+  "created_at": "2026-10-09T19:05:46+00:00"
+ },
+ {
+  "run_id": "run-20261009-190545-fba2",
+  "segment_id": "s3://team-48-vss-chunks-segments/segments/20261008_065328_VID_20261006_171812_002_chunk_0021_segment_002_of_006.mp4",
+  "original_video": "s3://team-48-vss-chunks/team-48/20261008_065328_VID_20261006_171812_002_chunk_0021.mp4",
+  "camera_id": "nyc_streets_cam-1",
+  "location": "new_york",
+  "segment_number": 2,
+  "start_sec": 5.0,
+  "end_sec": 10.0,
+  "caption_source": "cosmos_reason_direct",
+  "cosmos_tags": {
+   "signal": "green",
+   "vehicles": "unclear",
+   "peds": "crossing",
+   "blocked": "yes",
+   "cross": "go"
+  },
+  "yolo": {
+   "car": 3,
+   "person": 14,
+   "traffic light": 1,
+   "truck": 2,
+   "bicycle": 2,
+   "vehicles_total": 5
+  },
+  "decision": "WAIT",
+  "llm_decision": "WAIT",
+  "unclear": false,
+  "signal": "green",
+  "hazards": [
+   "moving_traffic",
+   "blocked_crosswalk"
+  ],
+  "reasons": [
+   "green light",
+   "pedestrians crossing",
+   "partial blockage"
+  ],
+  "confidence": 0.8,
+  "model": "meta-llama/Llama-3.3-70B-Instruct",
+  "created_at": "2026-10-09T19:05:46+00:00"
+ },
+ {
+  "run_id": "run-20261009-190545-fba2",
+  "segment_id": "s3://team-48-vss-chunks-segments/segments/20261008_065328_VID_20261006_171812_002_chunk_0021_segment_003_of_006.mp4",
+  "original_video": "s3://team-48-vss-chunks/team-48/20261008_065328_VID_20261006_171812_002_chunk_0021.mp4",
+  "camera_id": "nyc_streets_cam-1",
+  "location": "new_york",
+  "segment_number": 3,
+  "start_sec": 10.0,
+  "end_sec": 15.0,
+  "caption_source": "cosmos_reason_direct",
+  "cosmos_tags": {
+   "signal": "red",
+   "vehicles": "moving",
+   "peds": "crossing",
+   "blocked": "no",
+   "cross": "wait"
+  },
+  "yolo": {
+   "car": 3,
+   "person": 13,
+   "traffic light": 2,
+   "truck": 2,
+   "bicycle": 2,
+   "motorcycle": 1,
+   "vehicles_total": 6
+  },
+  "decision": "NO-GO",
+  "llm_decision": "NO-GO",
+  "unclear": false,
+  "signal": "dont_walk",
+  "hazards": [
+   "moving_traffic",
+   "vehicle_in_crosswalk"
+  ],
+  "reasons": [
+   "Red dont-walk signal",
+   "Vehicles in crosswalk",
+   "Moving traffic"
+  ],
+  "confidence": 0.9,
+  "model": "meta-llama/Llama-3.3-70B-Instruct",
+  "created_at": "2026-10-09T19:05:46+00:00"
+ },
+ {
+  "run_id": "run-20261009-190545-fba2",
+  "segment_id": "s3://team-48-vss-chunks-segments/segments/20261008_065328_VID_20261006_171812_002_chunk_0021_segment_004_of_006.mp4",
+  "original_video": "s3://team-48-vss-chunks/team-48/20261008_065328_VID_20261006_171812_002_chunk_0021.mp4",
+  "camera_id": "nyc_streets_cam-1",
+  "location": "new_york",
+  "segment_number": 4,
+  "start_sec": 15.0,
+  "end_sec": 20.0,
+  "caption_source": "cosmos_reason_direct",
+  "cosmos_tags": {
+   "signal": "green",
+   "vehicles": "stopped",
+   "peds": "crossing",
+   "blocked": "no",
+   "cross": "go"
+  },
+  "yolo": {
+   "car": 3,
+   "person": 13,
+   "traffic light": 2,
+   "truck": 1,
+   "bicycle": 2,
+   "vehicles_total": 4
+  },
+  "decision": "GO",
+  "llm_decision": "GO",
+  "unclear": false,
+  "signal": "walk",
+  "hazards": [],
+  "reasons": [
+   "walk signal",
+   "clear crosswalk",
+   "vehicles stopped"
+  ],
+  "confidence": 0.9,
+  "model": "meta-llama/Llama-3.3-70B-Instruct",
+  "created_at": "2026-10-09T19:05:46+00:00"
+ },
+ {
+  "run_id": "run-20261009-190545-fba2",
+  "segment_id": "s3://team-48-vss-chunks-segments/segments/20261008_065328_VID_20261006_171812_002_chunk_0021_segment_005_of_006.mp4",
+  "original_video": "s3://team-48-vss-chunks/team-48/20261008_065328_VID_20261006_171812_002_chunk_0021.mp4",
+  "camera_id": "nyc_streets_cam-1",
+  "location": "new_york",
+  "segment_number": 5,
+  "start_sec": 20.0,
+  "end_sec": 25.0,
+  "caption_source": "cosmos_reason_direct",
+  "cosmos_tags": {
+   "signal": "green",
+   "vehicles": "unclear",
+   "peds": "crossing",
+   "blocked": "no",
+   "cross": "go"
+  },
+  "yolo": {
+   "car": 4,
+   "person": 14,
+   "bicycle": 3,
+   "truck": 2,
+   "traffic light": 2,
+   "motorcycle": 1,
+   "vehicles_total": 7
+  },
+  "decision": "GO",
+  "llm_decision": "GO",
+  "unclear": false,
+  "signal": "walk",
+  "hazards": [
+   "moving_traffic",
+   "cyclists"
+  ],
+  "reasons": [
+   "walk signal",
+   "no turning vehicles",
+   "clear crosswalk"
+  ],
+  "confidence": 0.8,
+  "model": "meta-llama/Llama-3.3-70B-Instruct",
+  "created_at": "2026-10-09T19:05:46+00:00"
+ },
+ {
+  "run_id": "run-20261009-190545-fba2",
+  "segment_id": "s3://team-48-vss-chunks-segments/segments/20261008_065328_VID_20261006_171812_002_chunk_0021_segment_006_of_006.mp4",
+  "original_video": "s3://team-48-vss-chunks/team-48/20261008_065328_VID_20261006_171812_002_chunk_0021.mp4",
+  "camera_id": "nyc_streets_cam-1",
+  "location": "new_york",
+  "segment_number": 6,
+  "start_sec": 25.0,
+  "end_sec": 30.0,
+  "caption_source": "cosmos_reason_direct",
+  "cosmos_tags": {
+   "signal": "green",
+   "vehicles": "moving",
+   "peds": "waiting",
+   "blocked": "yes",
+   "cross": "wait"
+  },
+  "yolo": {
+   "car": 5,
+   "person": 13,
+   "traffic light": 2,
+   "truck": 1,
+   "bicycle": 1,
+   "vehicles_total": 6
+  },
+  "decision": "WAIT",
+  "llm_decision": "WAIT",
+  "unclear": false,
+  "signal": "green",
+  "hazards": [
+   "moving_traffic",
+   "blocked_crosswalk"
+  ],
+  "reasons": [
+   "green light",
+   "moving vehicles",
+   "partial blockage"
+  ],
+  "confidence": 0.8,
+  "model": "meta-llama/Llama-3.3-70B-Instruct",
+  "created_at": "2026-10-09T19:05:46+00:00"
+ },
+ {
+  "run_id": "run-20261009-191927-16b6",
+  "segment_id": "s3://team-48-vss-chunks-segments/segments/20261008_065354_VID_20261006_171812_002_chunk_0022_segment_001_of_006.mp4",
+  "original_video": "s3://team-48-vss-chunks/team-48/20261008_065354_VID_20261006_171812_002_chunk_0022.mp4",
+  "camera_id": "nyc_streets_cam-1",
+  "location": "new_york",
+  "segment_number": 1,
+  "start_sec": 0.0,
+  "end_sec": 5.0,
+  "caption_source": "cosmos_reason_direct",
+  "cosmos_tags": {
+   "signal": "green",
+   "vehicles": "unclear",
+   "peds": "waiting",
+   "blocked": "no",
+   "cross": "go"
+  },
+  "yolo": {
+   "person": 12,
+   "car": 5,
+   "truck": 1,
+   "traffic light": 2,
+   "bicycle": 2,
+   "vehicles_total": 6
+  },
+  "decision": "GO",
+  "llm_decision": "GO",
+  "unclear": false,
+  "signal": "walk",
+  "hazards": [],
+  "reasons": [
+   "Walk signal",
+   "Clear crosswalk",
+   "No turning vehicles"
+  ],
+  "confidence": 0.9,
+  "model": "meta-llama/Llama-3.3-70B-Instruct",
+  "created_at": "2026-10-09T19:19:29+00:00"
+ },
+ {
+  "run_id": "run-20261009-191927-16b6",
+  "segment_id": "s3://team-48-vss-chunks-segments/segments/20261008_065354_VID_20261006_171812_002_chunk_0022_segment_002_of_006.mp4",
+  "original_video": "s3://team-48-vss-chunks/team-48/20261008_065354_VID_20261006_171812_002_chunk_0022.mp4",
+  "camera_id": "nyc_streets_cam-1",
+  "location": "new_york",
+  "segment_number": 2,
+  "start_sec": 5.0,
+  "end_sec": 10.0,
+  "caption_source": "cosmos_reason_direct",
+  "cosmos_tags": {
+   "signal": "red",
+   "vehicles": "stopped",
+   "peds": "waiting",
+   "blocked": "no",
+   "cross": "wait"
+  },
+  "yolo": {
+   "car": 5,
+   "person": 11,
+   "traffic light": 3,
+   "truck": 1,
+   "bicycle": 2,
+   "vehicles_total": 6
+  },
+  "decision": "WAIT",
+  "llm_decision": "WAIT",
+  "unclear": false,
+  "signal": "red",
+  "hazards": [
+   "crowded_crosswalk"
+  ],
+  "reasons": [
+   "Red light",
+   "Vehicles stopped",
+   "Pedestrians waiting"
+  ],
+  "confidence": 0.8,
+  "model": "meta-llama/Llama-3.3-70B-Instruct",
+  "created_at": "2026-10-09T19:19:29+00:00"
+ },
+ {
+  "run_id": "run-20261009-191927-16b6",
+  "segment_id": "s3://team-48-vss-chunks-segments/segments/20261008_065354_VID_20261006_171812_002_chunk_0022_segment_003_of_006.mp4",
+  "original_video": "s3://team-48-vss-chunks/team-48/20261008_065354_VID_20261006_171812_002_chunk_0022.mp4",
+  "camera_id": "nyc_streets_cam-1",
+  "location": "new_york",
+  "segment_number": 3,
+  "start_sec": 10.0,
+  "end_sec": 15.0,
+  "caption_source": "cosmos_reason_direct",
+  "cosmos_tags": {
+   "signal": "red",
+   "vehicles": "unclear",
+   "peds": "waiting",
+   "blocked": "no",
+   "cross": "wait"
+  },
+  "yolo": {
+   "car": 3,
+   "person": 12,
+   "truck": 1,
+   "traffic light": 2,
+   "bicycle": 3,
+   "motorcycle": 1,
+   "vehicles_total": 5
+  },
+  "decision": "WAIT",
+  "llm_decision": "WAIT",
+  "unclear": false,
+  "signal": "red",
+  "hazards": [
+   "moving_traffic"
+  ],
+  "reasons": [
+   "Red light",
+   "Vehicles moving",
+   "Pedestrians waiting"
+  ],
+  "confidence": 0.8,
+  "model": "meta-llama/Llama-3.3-70B-Instruct",
+  "created_at": "2026-10-09T19:19:29+00:00"
+ },
+ {
+  "run_id": "run-20261009-191927-16b6",
+  "segment_id": "s3://team-48-vss-chunks-segments/segments/20261008_065354_VID_20261006_171812_002_chunk_0022_segment_004_of_006.mp4",
+  "original_video": "s3://team-48-vss-chunks/team-48/20261008_065354_VID_20261006_171812_002_chunk_0022.mp4",
+  "camera_id": "nyc_streets_cam-1",
+  "location": "new_york",
+  "segment_number": 4,
+  "start_sec": 15.0,
+  "end_sec": 20.0,
+  "caption_source": "cosmos_reason_direct",
+  "cosmos_tags": {
+   "signal": "red",
+   "vehicles": "stopped",
+   "peds": "waiting",
+   "blocked": "no",
+   "cross": "wait"
+  },
+  "yolo": {
+   "car": 5,
+   "person": 13,
+   "bicycle": 2,
+   "traffic light": 2,
+   "truck": 1,
+   "motorcycle": 1,
+   "vehicles_total": 7
+  },
+  "decision": "WAIT",
+  "llm_decision": "WAIT",
+  "unclear": false,
+  "signal": "red",
+  "hazards": [
+   "moving_traffic"
+  ],
+  "reasons": [
+   "Red signal",
+   "Vehicles stopped",
+   "Pedestrians waiting"
+  ],
+  "confidence": 0.8,
+  "model": "meta-llama/Llama-3.3-70B-Instruct",
+  "created_at": "2026-10-09T19:19:29+00:00"
+ },
+ {
+  "run_id": "run-20261009-191927-16b6",
+  "segment_id": "s3://team-48-vss-chunks-segments/segments/20261008_065354_VID_20261006_171812_002_chunk_0022_segment_005_of_006.mp4",
+  "original_video": "s3://team-48-vss-chunks/team-48/20261008_065354_VID_20261006_171812_002_chunk_0022.mp4",
+  "camera_id": "nyc_streets_cam-1",
+  "location": "new_york",
+  "segment_number": 5,
+  "start_sec": 20.0,
+  "end_sec": 25.0,
+  "caption_source": "cosmos_reason_direct",
+  "cosmos_tags": {
+   "signal": "red",
+   "vehicles": "stopped",
+   "peds": "waiting",
+   "blocked": "no",
+   "cross": "wait"
+  },
+  "yolo": {
+   "person": 15,
+   "car": 4,
+   "traffic light": 2,
+   "truck": 2,
+   "bicycle": 3,
+   "vehicles_total": 6
+  },
+  "decision": "WAIT",
+  "llm_decision": "WAIT",
+  "unclear": false,
+  "signal": "dont_walk",
+  "hazards": [
+   "crowded_crosswalk"
+  ],
+  "reasons": [
+   "Red signal",
+   "Vehicles stopped",
+   "Pedestrians waiting"
+  ],
+  "confidence": 0.8,
+  "model": "meta-llama/Llama-3.3-70B-Instruct",
+  "created_at": "2026-10-09T19:19:29+00:00"
+ },
+ {
+  "run_id": "run-20261009-191927-16b6",
+  "segment_id": "s3://team-48-vss-chunks-segments/segments/20261008_065354_VID_20261006_171812_002_chunk_0022_segment_006_of_006.mp4",
+  "original_video": "s3://team-48-vss-chunks/team-48/20261008_065354_VID_20261006_171812_002_chunk_0022.mp4",
+  "camera_id": "nyc_streets_cam-1",
+  "location": "new_york",
+  "segment_number": 6,
+  "start_sec": 25.0,
+  "end_sec": 30.0,
+  "caption_source": "cosmos_reason_direct",
+  "cosmos_tags": {
+   "signal": "green",
+   "vehicles": "stopped",
+   "peds": "crossing",
+   "blocked": "no",
+   "cross": "go"
+  },
+  "yolo": {
+   "person": 18,
+   "car": 4,
+   "bicycle": 3,
+   "traffic light": 2,
+   "truck": 2,
+   "motorcycle": 1,
+   "vehicles_total": 7
+  },
+  "decision": "GO",
+  "llm_decision": "GO",
+  "unclear": false,
+  "signal": "walk",
+  "hazards": [],
+  "reasons": [
+   "Green walk signal",
+   "Vehicles stopped",
+   "Clear crosswalk"
+  ],
+  "confidence": 0.9,
+  "model": "meta-llama/Llama-3.3-70B-Instruct",
+  "created_at": "2026-10-09T19:19:29+00:00"
  }
 ]

@@ -48,7 +48,7 @@ nav .links a { color:var(--sub); transition:color .2s; } nav .links a:hover { co
 
 /* featured */
 .eyebrow { font-size:12px; font-weight:600; letter-spacing:.06em; text-transform:uppercase; color:var(--ter); margin:0 0 12px; }
-.tiles { display:grid; grid-template-columns:repeat(3,1fr); gap:14px; margin-bottom:22px; }
+.tiles { display:grid; grid-template-columns:repeat(auto-fit,minmax(210px,1fr)); gap:14px; margin-bottom:22px; }
 .tile { background:var(--card); border:1px solid var(--sep); border-radius:20px; padding:16px 18px; cursor:pointer; transition:transform .25s cubic-bezier(.2,.8,.2,1), border-color .25s, background .25s; }
 .tile:hover { transform:scale(1.015); background:var(--card2); }
 .tile.on { border-color:rgba(10,132,255,.7); box-shadow:0 0 0 3px rgba(10,132,255,.18); }
@@ -136,6 +136,7 @@ select { appearance:none; -webkit-appearance:none; background:var(--fill) url("d
 .rb-move { transform-box:fill-box; }
 .st-wait .rb-spin { animation:spin var(--spin,2.6s) linear infinite; }
 .st-dizzy .rb-spin { animation:spin .7s linear infinite; }
+.st-hold .rb-spin { animation:none; }
 @keyframes spin { to { transform:rotate(360deg); } }
 .st-nogo .rb-move { animation:backoff 1.1s ease-in-out infinite; }
 .st-yield .rb-move { animation:shake .5s ease-in-out infinite; }
@@ -213,13 +214,20 @@ footer b { color:var(--sub); font-weight:500; }
 .now i { width:10px; height:10px; border-radius:50%; flex:none; box-shadow:0 0 12px currentColor; background:currentColor; }
 .react { margin-top:12px; font-size:13px; color:#c7f5d3; background:rgba(48,209,88,.1); border-radius:12px; padding:9px 12px; display:none; }
 .react.on { display:block; }
+.kpis { display:grid; grid-template-columns:repeat(auto-fit,minmax(170px,1fr)); gap:14px; margin-bottom:18px; }
+.kpi { background:var(--card); border:1px solid var(--sep); border-radius:20px; padding:18px 20px; }
+.kpi b { display:block; font-size:30px; font-weight:700; letter-spacing:-.02em; font-variant-numeric:tabular-nums; }
+.kpi b s { color:var(--ter); font-size:18px; font-weight:600; text-decoration:none; margin-right:6px; }
+.kpi span { color:var(--sub); font-size:13px; }
+#pe td, #pe th { white-space:nowrap; }
+#pe td.bad { color:#ff8a80; } #pe td.good { color:#7ee49b; }
 @media (max-width:1100px) { .main, .two { grid-template-columns:minmax(0,1fr); } .hero { grid-template-columns:auto 1fr; } .disclaim { grid-column:1/-1; max-width:none; } .tiles { grid-template-columns:1fr; } }
 </style>
 </head>
 <body>
 <nav>
   <a class="mark" href="#top"><img src="logo.jpg" alt="">CrossWise</a>
-  <div class="links"><a href="#live">Live</a><a href="#scorecard">Scorecard</a><a href="#search">Search</a><a href="label">Evaluate</a></div>
+  <div class="links"><a href="#live">Live</a><a href="#impact">Impact</a><a href="#scorecard">Scorecard</a><a href="#search">Search</a><a href="label">Evaluate</a></div>
 </nav>
 
 <div class="page" id="top">
@@ -256,7 +264,7 @@ footer b { color:var(--sub); font-weight:500; }
         <canvas id="ms" class="ms"></canvas>
       </div>
       <div class="axis"><span>0 s</span><span id="tlMeta"></span><span id="tlEnd"></span></div>
-      <div class="tlabels"><span><b>Bars</b> · segment reasoning every 5 s (Cosmos Reason + Llama 3.3)</span><span><b>Strip</b> · live perception 5×/s (YOLO11 tracks)</span></div>
+      <div class="tlabels"><span><b>Bars</b> · what the robot does in each 5 s segment (hover: Cosmos + Llama 3.3 verdict)</span><span><b>Strip</b> · decision 5×/s from YOLO11 tracks, the pixel-read walk signal and Gemma 4 obstacles</span></div>
       <div class="bar">
         <div class="seg"><button id="mReview" class="on">Review</button><button id="mReplay">Replay as live</button></div>
         <div class="stepper">Escalate after<div class="sb"><button id="nMinus">−</button><span id="nVal">20</span><button id="nPlus">+</button></div>s stuck</div>
@@ -277,7 +285,7 @@ footer b { color:var(--sub); font-weight:500; }
       </div>
       <div id="react" class="react"></div>
       <div class="meter">
-        <div class="row"><span>Confusion at the curb</span><span id="mTxt">0 s</span></div>
+        <div class="row"><span>Time at the curb</span><span id="mTxt">0 s</span></div>
         <div class="track"><i id="mBar" style="width:0"></i></div>
       </div>
       <div class="sub-h">Right now</div>
@@ -290,6 +298,19 @@ footer b { color:var(--sub); font-weight:500; }
       <details id="capBox" style="display:none"><summary>NVIDIA Cosmos Reason caption</summary><p id="cap"></p></details>
       <div id="model" class="foot"></div>
     </aside>
+  </div>
+
+  <div class="section" id="impact">
+    <h3>Frame by frame beats segment by segment.</h3>
+    <p>The same robot replayed on every featured clip: once acting on one LLM verdict per 5 s segment, once on CrossWise's
+      frame-level perception. Checked in hindsight against the pedestrian signal read from the pixels and the vehicle tracks.
+      <span style="color:var(--ter)">Grey: segment LLM. White: CrossWise.</span></p>
+    <div id="kpis" class="kpis"></div>
+    <div class="card" style="overflow-x:auto"><table id="pe"></table></div>
+    <p class="note">Vehicle in path ≤ 2 s = a vehicle moved through the robot's path at the start or within the next 2 s, so the robot
+      has to yield (CrossWise: a queued car creeping forward, a stopped car pulling away, one tracking false alarm on a parked
+      truck at the frame edge). Walk → start = seconds from the
+      first frame the WALK lamp is lit to the robot rolling (includes 0.6–1.2 s of confirmation).</p>
   </div>
 
   <div class="section" id="scorecard">
@@ -341,8 +362,9 @@ footer b { color:var(--sub); font-weight:500; }
 const $ = id => document.getElementById(id);
 const COL = { 'GO':'#30d158', 'WAIT':'#ff9f0a', 'NO-GO':'#ff453a' };
 const V = [$('vA'), $('vB')];
-const CROSS_S = 3.0, ARRIVE_S = 1.6, PATH_HZ = ['blocked_crosswalk', 'construction'];
-let T = null, M = [], F = [], R = [], ESC = [], Z = null;
+const ARRIVE_S = 1.6, PREDICT_S = 1.5, SIGNAL_MAX_S = 90, PATH_HZ = ['blocked_crosswalk', 'construction'];
+const SIG = { walk: 'WALK', dont_walk: "DON'T WALK", flashing: 'COUNTDOWN', none: 'no signal in view' };
+let T = null, M = [], F = [], R = [], ESC = [], Z = null, SEGD = [];
 let idx = 0, act = 0, mode = 'review', chart = null, adhoc = false, N = 4, showDet = true;
 let lastSeg = null, lastMi = -1, lastRobotKey = '';
 const esc = s => String(s ?? '').replace(/[&<>"]/g, c => ({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;'}[c]));
@@ -384,16 +406,27 @@ async function loadClips() {
   $('clip').innerHTML = clips.map(c => `<option value="${esc(c.video)}">${c.demo ? '★ ' : ''}${esc(short(c.camera_id))} · …${esc(c.name.replace('.mp4', '').slice(-14))} · GO ${c.go}/${c.segments}</option>`).join('');
   const demo = clips.filter(c => c.demo);
   const tls = await Promise.all(demo.map(c => api(`api/timeline?video=${encodeURIComponent(c.video)}&n=${N}`)));
-  const order = ['sf_streets_cam-4', 'sf_streets_cam-1', 'nyc_streets_cam-1'];
-  const items = demo.map((c, k) => ({ c, t: tls[k] })).sort((a, b) => order.indexOf(a.c.camera_id) - order.indexOf(b.c.camera_id));
+  const order = ['chunk_0022', 'chunk_0029', 'sf4_', 'sf1_', 'chunk_0021'];
+  const rank = c => { const k = order.findIndex(o => c.video.includes(o)); return k < 0 ? 99 : k; };
+  const items = demo.map((c, k) => ({ c, t: tls[k] })).sort((a, b) => rank(a.c) - rank(b.c));
   $('tiles').innerHTML = items.map(({ c, t }) => {
     const sim = simulate(t);
-    const goes = sim.R.filter((r, i) => r.st === 'crossing' && (!i || sim.R[i - 1].st !== 'crossing')).length;
-    const e = sim.ESC[0];
-    const col = e ? (e.action === 'REROUTE' ? '#ff453a' : '#ff9f0a') : '#30d158';
+    const starts = sim.R.filter((r, i) => r.st === 'crossing' && (!i || !['crossing', 'yield'].includes(sim.R[i - 1].st)));
+    const goes = starts.length, e = sim.ESC[0];
+    const onset = sim.R.find(r => r.reaction?.onset)?.reaction;
+    const signal = sim.M.some(m => m.sig !== 'none');
+    let s;
+    if (e) s = `Stuck at the curb · ${e.action === 'REROUTE' ? 'reroutes' : 'calls an operator'} at ${fmt(e.at_sec)}`;
+    else if (onset) s = `Holds on DON'T WALK · rolls ${(onset.go - onset.seen).toFixed(1)} s after WALK lights`;
+    else if (goes && signal) s = `Reads WALK · crosses ${goes}×, holds through the countdown`;
+    else if (goes) s = `No signal in view · crosses ${goes}× in traffic gaps`;
+    else if (signal) s = `DON'T WALK all clip · holds calmly, no spinning`;
+    else s = 'No safe gap in this clip';
+    const col = e ? (e.action === 'REROUTE' ? '#ff453a' : '#ff9f0a') : goes ? '#30d158' : '#ff9f0a';
     const mstrip = sim.M.filter((_, i) => i % 5 === 0).map(m => `<i style="background:${COL[m.d]}"></i>`).join('');
-    return `<div class="tile" data-v="${esc(c.video)}"><div class="k"><span class="dot" style="background:${col}"></span>${esc(pretty(c.camera_id))}</div>
-      <div class="s">${e ? `Stuck at the curb · ${e.action === 'REROUTE' ? 'reroutes' : 'calls an operator'} at ${fmt(e.at_sec)}` : `Crosses ${goes}× the moment the walk phase opens`}</div>
+    const name = pretty(c.camera_id) + (c.camera_id.startsWith('nyc') ? ` · ${c.name.match(/chunk_(\d+)/)?.[1].replace(/^00/, '#') || ''}` : '');
+    return `<div class="tile" data-v="${esc(c.video)}"><div class="k"><span class="dot" style="background:${col}"></span>${esc(name)}</div>
+      <div class="s">${esc(s)}</div>
       <div class="mini" style="gap:1px">${mstrip}</div></div>`;
   }).join('');
   await loadClip(items[0].c.video);
@@ -413,31 +446,50 @@ function flatten(tl) {
       }
     }
   });
-  return { M, F, zone: tl.segments.find(s => s.perception)?.perception.zone || null };
+  return { M, F, zone: tl.segments.find(s => s.perception)?.perception.cfg || null };
+}
+
+/* What the robot does in each segment, from the moments (so bars and strip agree); LLM verdict as fallback. */
+function segDecisions(tl, M) {
+  return tl.segments.map((s, si) => {
+    const ms = M.filter(m => m.si === si && !m.nop);
+    if (!ms.length) return s.decision;
+    const share = d => ms.filter(m => m.d === d).length / ms.length;
+    return share('GO') >= .3 ? 'GO' : share('NO-GO') >= .3 ? 'NO-GO' : 'WAIT';
+  });
 }
 
 /* Robot state machine over the 5 Hz moments: curb -> crossing (-> yield) -> across -> next robot at the curb. */
 function simulate(tl) {
   const { M, F, zone } = flatten(tl);
+  const crossS = zone?.cross_s || 3.0;
   const R = [], ESC = [];
-  let st = 'curb', p = 0, since = M[0]?.t || 0, arrived = 0, walkFrom = null, fired = false, reaction = null, crossStart = null;
+  let st = 'curb', p = 0, since = M[0]?.t || 0, arrived = 0, walkLit = null, fired = false, reaction = null;
   M.forEach((m, i) => {
-    if (st === 'reroute') { R.push({ st, p: 0, stuck: m.t - since, esc: ESC.at(-1), reaction: null, walkFrom: null }); return; }
+    if (st === 'reroute') { R.push({ st, p: 0, stuck: m.t - since, esc: ESC.at(-1), reaction: null, crossS }); return; }
     const dt = i ? m.t - M[i - 1].t : 0;
-    if (st === 'crossing') { p += dt / CROSS_S; if (p >= 1) { p = 1; st = 'across'; arrived = m.t; } }
+    if (st === 'crossing') { p += dt / crossS; if (p >= 1) { p = 1; st = 'across'; arrived = m.t; } }
     else if (st === 'across' && m.t - arrived >= ARRIVE_S) { st = 'curb'; p = 0; since = m.t; fired = false; reaction = null; }
-    if (m.xp > 0 || m.d === 'GO') { if (walkFrom === null) walkFrom = m.t; } else walkFrom = null;
-    if (st === 'curb' && m.d === 'GO') { st = 'crossing'; crossStart = m.t; reaction = { seen: walkFrom ?? m.t, go: m.t }; }
+    const lamp = F[i]?.h?.[4];
+    if (lamp === 'walk') { if (walkLit === null) walkLit = m.t; } else if (lamp === 'hand') walkLit = null;
+    if (st === 'curb' && m.d === 'GO') {
+      st = 'crossing';
+      reaction = m.sig === 'walk'
+        ? { kind: 'walk', seen: Math.max(walkLit ?? m.t, since), go: m.t, onset: walkLit !== null && walkLit > since }
+        : { kind: 'gap', seen: Math.max(since, +(m.t - m.quiet).toFixed(1)), go: m.t };
+    }
     else if (st === 'crossing' && m.d === 'NO-GO') st = 'yield';
     else if (st === 'yield' && m.d !== 'NO-GO') st = 'crossing';
     const stuck = st === 'curb' ? m.t - since : 0;
-    if (st === 'curb' && stuck >= N * 5 && !fired) {
+    // a readable don't-walk explains the wait: hold for the walk phase instead of escalating
+    const held = st === 'curb' && (m.sig === 'dont_walk' || m.sig === 'flashing');
+    if (st === 'curb' && stuck >= (held ? SIGNAL_MAX_S : N * 5) && !fired) {
       fired = true; ESC.push(makeEsc(tl, M, since, m));
       if (ESC.at(-1).action === 'REROUTE') st = 'reroute';
     }
-    R.push({ st, p, stuck, esc: (st === 'curb' || st === 'reroute') && fired ? ESC.at(-1) : null, reaction, walkFrom });
+    R.push({ st, p, stuck, held, crossS, esc: (st === 'curb' || st === 'reroute') && fired ? ESC.at(-1) : null, reaction });
   });
-  return { M, F, R, ESC, zone };
+  return { M, F, R, ESC, zone, SEGD: segDecisions(tl, M) };
 }
 
 function makeEsc(tl, M, since, m) {
@@ -456,7 +508,7 @@ function makeEsc(tl, M, since, m) {
 
 async function loadClip(v, at = 0) {
   T = await api(`api/timeline?video=${encodeURIComponent(v)}&n=${N}`); adhoc = false;
-  ({ M, F, R, ESC, zone: Z } = simulate(T));
+  ({ M, F, R, ESC, zone: Z, SEGD } = simulate(T));
   lastSeg = null; lastMi = -1; lastRobotKey = '';
   $('clip').value = v;
   document.querySelectorAll('.tile').forEach(t => t.classList.toggle('on', t.dataset.v === v));
@@ -490,8 +542,8 @@ function render(force = false) {
 function drawTimeline(t) {
   const end = T.segments.at(-1).end_sec;
   const seen = s => mode !== 'replay' || s.start_sec <= t + .01;
-  $('tl').innerHTML = T.segments.map((s, i) => `<div class="sg ${seen(s) ? '' : 'hidden'} ${s.unclear ? 'unclear' : ''} ${i === idx ? 'cur' : ''}"
-      style="background:${COL[s.decision]}" data-i="${i}" title="${fmt(s.start_sec)}–${fmt(s.end_sec)} · segment reasoning: ${s.decision}">${seen(s) ? s.decision : ''}</div>`).join('')
+  $('tl').innerHTML = T.segments.map((s, i) => `<div class="sg ${seen(s) ? '' : 'hidden'} ${s.unclear && !s.perception ? 'unclear' : ''} ${i === idx ? 'cur' : ''}"
+      style="background:${COL[SEGD[i]]}" data-i="${i}" title="${fmt(s.start_sec)}–${fmt(s.end_sec)} · robot: ${SEGD[i]} · Cosmos + Llama segment verdict: ${s.decision}">${seen(s) ? SEGD[i] : ''}</div>`).join('')
     + ESC.filter(e => mode !== 'replay' || t >= e.at_sec - .05).map(e => `<div class="pin" style="left:${e.at_sec / end * 100}%" title="${esc(e.action)}"></div>`).join('');
   const c = $('ms'), w = c.clientWidth, h = c.clientHeight, dpr = devicePixelRatio || 1;
   if (c.width !== w * dpr) { c.width = w * dpr; c.height = h * dpr; }
@@ -513,22 +565,27 @@ function showMoment(m, r, t) {
   $('big').textContent = d; $('big').style.color = COL[d];
   let say;
   if (r.st === 'reroute') say = 'Gave up on this crossing — rerouting to an easier one';
-  else if (r.esc) say = 'Dizzy from waiting — asking a human';
-  else if (r.st === 'crossing') say = 'Walk phase open — crossing now';
-  else if (r.st === 'yield') say = 'Vehicle in the crossing — yielding mid-road';
+  else if (r.esc) say = 'No walk phase, no gap — asking a human';
+  else if (r.st === 'crossing') say = r.reaction?.kind === 'walk' ? 'WALK is lit — crossing now' : 'Gap in traffic — crossing now';
+  else if (r.st === 'yield') say = 'Vehicle in the path — yielding mid-road';
   else if (r.st === 'across') say = 'Made it across ✓';
-  else if (d === 'NO-GO') say = 'Traffic in the crossing — backing off';
-  else if (m.xp > 0) say = 'People are stepping out — confirming the walk phase';
-  else say = 'Confused at the curb — spinning in place';
+  else if (d === 'NO-GO') say = m.mv ? 'Vehicle in the path — holding back' : 'Vehicle approaching — holding back';
+  else if (m.sig === 'flashing') say = 'Countdown flashing — too late to start, waits for the next WALK';
+  else if (m.sig === 'dont_walk') say = "DON'T WALK — holding calmly, will roll the instant WALK lights";
+  else if (m.why.startsWith('crosswalk obstructed')) say = 'Crosswalk obstructed — looking for a free path';
+  else say = 'No signal in view — watching for a safe gap';
   $('say').textContent = say;
-  $('sub2').textContent = `${m.mv} vehicle${m.mv === 1 ? '' : 's'} moving through the crossing · ${m.xp} pedestrian${m.xp === 1 ? '' : 's'} crossing`;
-  const frac = r.st === 'curb' ? Math.min(1, r.stuck / (N * 5)) : 0;
+  $('sub2').textContent = `Signal: ${SIG[m.sig] || '—'} · ${m.mv} vehicle${m.mv === 1 ? '' : 's'} in path · ${m.pred} approaching · ${m.xp} ${m.xp === 1 ? 'person' : 'people'} crossing · ${m.lvl} traffic`;
+  const lim = r.held ? SIGNAL_MAX_S : N * 5;
+  const frac = r.st === 'curb' ? Math.min(1, r.stuck / lim) : 0;
   $('mBar').style.width = `${r.st === 'curb' ? Math.max(4, frac * 100) : 0}%`;
-  $('mBar').style.background = frac >= 1 ? 'var(--red)' : frac >= .5 ? 'var(--orange)' : 'var(--green)';
-  $('mTxt').textContent = r.st === 'curb' ? `${r.stuck.toFixed(1)} s of ${N * 5} s` : r.st === 'across' ? 'delivered' : 'on the move';
+  $('mBar').style.background = r.held ? 'var(--blue, #0a84ff)' : frac >= 1 ? 'var(--red)' : frac >= .5 ? 'var(--orange)' : 'var(--green)';
+  $('mTxt').textContent = r.st === 'curb' ? (r.held ? `${r.stuck.toFixed(1)} s · waiting for WALK` : `${r.stuck.toFixed(1)} s of ${N * 5} s`) : r.st === 'across' ? 'delivered' : 'on the move';
   const rc = r.reaction && r.st !== 'curb';
   $('react').classList.toggle('on', !!rc);
-  if (rc) $('react').textContent = `Walk phase seen at ${r.reaction.seen.toFixed(1)} s → rolling at ${r.reaction.go.toFixed(1)} s · ${(r.reaction.go - r.reaction.seen).toFixed(1)} s reaction`;
+  if (rc) $('react').textContent = r.reaction.kind === 'walk'
+    ? `${r.reaction.onset ? 'WALK lit' : 'At the curb on WALK'} at ${r.reaction.seen.toFixed(1)} s → rolling at ${r.reaction.go.toFixed(1)} s · ${(r.reaction.go - r.reaction.seen).toFixed(1)} s reaction · ${r.crossS.toFixed(1)} s to cross`
+    : `Path clear since ${r.reaction.seen.toFixed(1)} s → rolling at ${r.reaction.go.toFixed(1)} s · ${r.crossS.toFixed(1)} s to cross`;
   $('toast').classList.toggle('on', !!r.esc);
   if (r.esc) {
     $('tTtl').textContent = r.esc.action === 'REROUTE' ? `Stuck ${fmt(r.stuck)} — rerouting` : `Stuck ${fmt(r.stuck)} — calling a remote operator`;
@@ -543,12 +600,16 @@ function showSegment(s) {
   c += (s.hazards || []).map(h => `<span class="chip hz">${esc(h.replace(/_/g, ' '))}</span>`).join('') || '<span class="chip ok">no hazards</span>';
   if (s.unclear) c += '<span class="chip warn">unclear → WAIT</span>';
   if (s.llm_decision !== s.decision) c += `<span class="chip warn">guardrail overrode ${esc(s.llm_decision)}</span>`;
-  c += `<span class="chip">segment: ${esc(s.decision)}</span>`;
+  c += `<span class="chip">Cosmos + Llama segment verdict: ${esc(s.decision)}</span>`;
+  const ob = s.perception?.obstacles;
+  if (ob) c += ob.obstacles.length
+    ? `<span class="chip warn">Gemma 4: ${esc(ob.obstacles.map(o => o.type.replace('_', ' ')).join(', '))} · free path ${Math.round(ob.free[0] * 100)}–${Math.round(ob.free[1] * 100)}%</span>`
+    : '<span class="chip ok">Gemma 4: crosswalk clear</span>';
   $('chips').innerHTML = c;
   const y = Object.entries(s.yolo || {}).filter(([k]) => k !== 'vehicles_total');
   $('stats').innerHTML = y.map(([k, v]) => `<div><b>${v}</b><span>${esc(k)}</span></div>`).join('');
   $('capBox').style.display = s.caption ? '' : 'none'; $('cap').textContent = s.caption || '';
-  $('model').textContent = `Segment: ${s.model} on W&B Inference, traced in Weave · Moments: YOLO11 boxes stored by VAST, tracked at 5 fps`;
+  $('model').textContent = `Segment: ${s.model} on W&B Inference, traced in Weave · Moments: YOLO11 boxes stored by VAST, tracked at 5 fps with ego-motion removal; walk signal read from pixels; obstacles by Gemma 4 on W&B Inference (CoreWeave)`;
 }
 
 /* ---------- live detection overlay on the video ---------- */
@@ -565,7 +626,7 @@ function frameAt(t, mi) {
   const a = F[mi]; if (!a) return null;
   const b = F[mi + 1] && M[mi + 1].si === M[mi].si ? F[mi + 1] : null;
   const f = b ? Math.max(0, Math.min(1, (t - a.t) / (b.t - a.t))) : 0;
-  return { v: lerpBoxes(a.v, b?.v, f), p: lerpBoxes(a.p, b?.p, f), l: a.l };
+  return { v: lerpBoxes(a.v, b?.v, f), p: lerpBoxes(a.p, b?.p, f), h: a.h };
 }
 function drawOverlay(t, mi) {
   const c = $('ov'), w = c.clientWidth, h = c.clientHeight, dpr = devicePixelRatio || 1;
@@ -574,10 +635,20 @@ function drawOverlay(t, mi) {
   if (!showDet || t == null || !F.length) return;
   const fr = frameAt(t, mi); if (!fr) return;
   g.lineJoin = 'round'; g.font = '600 11px -apple-system, Inter, sans-serif';
+  const ob = T.segments[M[mi].si].perception?.obstacles;
   if (Z) {
+    const [p0, p1] = ob?.path || [Z.x0 ?? 0, Z.x1 ?? 1];
+    g.fillStyle = 'rgba(48,209,88,.07)'; g.fillRect(p0 * w, Z.v * h, (p1 - p0) * w, h - Z.v * h);
     g.strokeStyle = 'rgba(255,214,10,.55)'; g.setLineDash([8, 6]); g.lineWidth = 1.5;
     g.beginPath(); g.moveTo(0, Z.v * h); g.lineTo(w, Z.v * h); g.stroke(); g.setLineDash([]);
-    g.fillStyle = 'rgba(255,214,10,.8)'; g.fillText('CROSSING ZONE ↓', 10, Z.v * h + 14);
+    g.strokeStyle = 'rgba(48,209,88,.8)'; g.lineWidth = 2;
+    g.beginPath(); g.moveTo(p0 * w, Z.v * h); g.lineTo(p1 * w, Z.v * h); g.stroke();
+    g.fillStyle = 'rgba(48,209,88,.9)'; g.fillText('ROBOT PATH', p0 * w + 8, Z.v * h + 14);
+    (ob?.obstacles || []).forEach(o => {
+      const x0 = o.x0 * w, x1 = Math.max(o.x0 + .01, o.x1) * w, y = Math.min(h - 18, Z.v * h + 22);
+      g.fillStyle = 'rgba(255,159,10,.85)'; g.fillRect(x0, y, x1 - x0, 3);
+      g.fillText(o.type.replace('_', ' '), x0 + 2, y + 15);
+    });
   }
   const box = (b, color, lw, label, fill) => {
     const x = b[0] * w, y = b[1] * h, bw = (b[2] - b[0]) * w, bh = (b[3] - b[1]) * h;
@@ -590,12 +661,26 @@ function drawOverlay(t, mi) {
     }
   };
   fr.p.forEach(b => b[4] ? box(b, '#30d158', 2, 'crossing', 'rgba(48,209,88,.12)') : box(b, 'rgba(255,255,255,.35)', 1));
+  const arrow = (b, color) => {
+    const cx = (b[0] + b[2]) / 2 * w, cy = (b[1] + b[3]) / 2 * h;
+    const dx = (b[6] || 0) * PREDICT_S * w, dy = (b[7] || 0) * PREDICT_S * w;
+    if (Math.hypot(dx, dy) < 6) return;
+    const a = Math.atan2(dy, dx);
+    g.strokeStyle = color; g.fillStyle = color; g.lineWidth = 2; g.setLineDash([5, 4]);
+    g.beginPath(); g.moveTo(cx, cy); g.lineTo(cx + dx, cy + dy); g.stroke(); g.setLineDash([]);
+    g.beginPath(); g.moveTo(cx + dx, cy + dy);
+    g.lineTo(cx + dx - 9 * Math.cos(a - .45), cy + dy - 9 * Math.sin(a - .45));
+    g.lineTo(cx + dx - 9 * Math.cos(a + .45), cy + dy - 9 * Math.sin(a + .45)); g.fill();
+  };
   fr.v.forEach(b => {
-    if (b[4] === 2) box(b, '#ff453a', 2.5, `${b[5]} · moving`, 'rgba(255,69,58,.14)');
-    else if (b[4] === 1) box(b, 'rgba(255,159,10,.8)', 1.5, null);
+    if (b[4] === 2) { box(b, '#ff453a', 2.5, `${b[5]} · ${b[3] >= (Z?.v ?? 0) ? 'in path' : 'approaching'}`, 'rgba(255,69,58,.14)'); arrow(b, '#ff453a'); }
+    else if (b[4] === 1) { box(b, 'rgba(255,159,10,.8)', 1.5, null); arrow(b, 'rgba(255,159,10,.8)'); }
     else box(b, 'rgba(174,174,178,.55)', 1, null);
   });
-  fr.l.forEach(b => box(b, 'rgba(10,132,255,.9)', 1.5, null));
+  if (fr.h) {
+    const hc = { walk: '#f5f5f7', hand: '#ff453a', dark: '#8e8e93' }[fr.h[4]];
+    box(fr.h, hc, 2.5, { walk: 'WALK', hand: "DON'T WALK", dark: 'lamp off' }[fr.h[4]]);
+  }
 }
 
 /* ---------- robot view: top-down intersection ---------- */
@@ -615,7 +700,7 @@ function buildScene() {
       <g id="sWalk"><circle cx="0" cy="4" r="8" fill="#2c2c2e"/>
         <circle cx="0.5" cy="-0.6" r="1.5" fill="#000" fill-opacity=".55"/>
         <path d="M0 1.2 L-0.6 5.2 L-3 9 M-0.6 5.2 L2.4 8.6 M0 2.4 L-3 4.4 M0 2.4 L2.8 4" stroke="#000" stroke-opacity=".55" stroke-width="1.5" stroke-linecap="round" fill="none"/></g>
-      <text x="0" y="26" text-anchor="middle" fill="#6e6e73" style="font:600 7.5px var(--font);letter-spacing:.06em">INFERRED</text></g>
+      <text id="sSigLbl" x="0" y="26" text-anchor="middle" fill="#6e6e73" style="font:600 7.5px var(--font);letter-spacing:.06em"></text></g>
     <g id="sTrack"></g><g id="sFx"></g>
     <g id="sRobot" transform="translate(200,248)"><g class="rb-move"><g class="rb-spin">
       <ellipse cx="0" cy="3" rx="22" ry="25" fill="#000" opacity=".35"/>
@@ -634,9 +719,17 @@ function updateRobot(t, mi) {
   const m = M[mi], r = R[mi], s = T.segments[m.si];
   // robot position: interpolate progress while crossing
   let p = r.p;
-  if (r.st === 'crossing') p = Math.min(1, r.p + (t - m.t) / CROSS_S);
+  if (r.st === 'crossing') p = Math.min(1, r.p + (t - m.t) / r.crossS);
   const y = 248 - p * 196;
-  const x = r.st === 'reroute' ? 200 - Math.min(1, Math.max(0, t - r.esc.at_sec - 1) / 4) * 175 : 200;
+  const ob = s.perception?.obstacles, steer = ob?.obstacles?.length && !ob.path_blocked;
+  const x = r.st === 'reroute' ? 200 - Math.min(1, Math.max(0, t - r.esc.at_sec - 1) / 4) * 175
+    : 200 + (steer && r.st !== 'curb' ? Math.min(1, p * 4) * 16 : 0);
+  // pedestrian signal: as read from the video, the countdown blinks
+  const blinkOn = Math.floor(t * 2) % 2 === 0;
+  const handOn = m.sig === 'dont_walk' || (m.sig === 'flashing' && blinkOn), walkOn = m.sig === 'walk';
+  $('sHand').querySelector('circle').setAttribute('fill', handOn ? '#ff453a' : '#2c2c2e');
+  $('sWalk').querySelector('circle').setAttribute('fill', walkOn ? '#f5f5f7' : '#2c2c2e');
+  $('sSigLbl').textContent = m.sig === 'none' ? 'NO SIGNAL · GAP MODE' : m.sig === 'flashing' ? 'COUNTDOWN' : 'READ FROM VIDEO';
   $('sRobot').setAttribute('transform', `translate(${x.toFixed(1)},${y.toFixed(1)})`);
   // traffic from real detections, interpolated between 5 Hz samples
   const fr = frameAt(t, mi);
@@ -652,21 +745,24 @@ function updateRobot(t, mi) {
     const peds = fr.p.filter(b => b[4]).slice(0, 9);
     $('sPeds').innerHTML = peds.map((b, k) => `<circle cx="${178 + (k % 3) * 22}" cy="${(90 + ((b[0] + b[2]) / 2) * 116).toFixed(1)}" r="5" fill="#30d158" opacity=".9"/>`).join('');
   } else { $('sCars').innerHTML = ''; $('sPeds').innerHTML = ''; }
-  const key = [r.st, m.d, !!r.esc, r.esc?.action, Math.round(r.stuck / 3), m.xp > 0, s.segment_id, r.esc && t - r.esc.at_sec > 1].join('|');
+  const key = [r.st, m.d, m.sig, !!r.esc, r.esc?.action, Math.round(r.stuck / 3), m.xp > 0, s.segment_id, r.esc && t - r.esc.at_sec > 1].join('|');
   if (key === lastRobotKey) return; lastRobotKey = key;
   const sv = $('sv');
-  const cls = r.st === 'reroute' && t - r.esc.at_sec > 1 ? 'st-cross' : r.esc ? 'st-dizzy' : r.st === 'crossing' ? 'st-cross' : r.st === 'yield' ? 'st-yield' : r.st === 'across' ? '' : m.d === 'NO-GO' ? 'st-nogo' : 'st-wait';
+  const cls = r.st === 'reroute' && t - r.esc.at_sec > 1 ? 'st-cross' : r.esc ? 'st-dizzy' : r.st === 'crossing' ? 'st-cross' : r.st === 'yield' ? 'st-yield'
+    : r.st === 'across' ? '' : m.d === 'NO-GO' ? 'st-nogo' : r.held ? 'st-hold' : 'st-wait';
   sv.setAttribute('class', cls);
   sv.style.setProperty('--spin', `${Math.max(1.0, 2.8 - r.stuck * 0.12).toFixed(2)}s`);
-  const walkLit = m.d === 'GO' || r.st === 'crossing' || m.why.startsWith('walk phase');
-  $('sHand').querySelector('circle').setAttribute('fill', walkLit ? '#2c2c2e' : '#ff453a');
-  $('sWalk').querySelector('circle').setAttribute('fill', walkLit ? '#30d158' : '#2c2c2e');
-  const blocked = (s.hazards || []).some(h => PATH_HZ.includes(h)) || s.cosmos_tags?.blocked === 'yes';
-  $('sCones').innerHTML = blocked ? [[182, 120], [204, 146], [190, 174]].map(([x, y]) => `<g transform="translate(${x},${y})"><path d="M0 -10 L8 8 L-8 8 Z" fill="#ff9f0a"/><rect x="-6" y="-1" width="12" height="3" fill="#fff" opacity=".9"/></g>`).join('') + '<rect x="160" y="96" width="80" height="6" rx="3" fill="#ff453a" opacity=".85"/>' : '';
-  $('sTrack').innerHTML = r.st === 'curb' ? `<circle cx="200" cy="248" r="31" fill="none" stroke="#3a3a3c" stroke-width="2" stroke-dasharray="3 7" class="ring"/>`
-    : r.st === 'crossing' ? `<path d="M 200 236 L 200 52" stroke="#30d158" stroke-width="2" class="dash" opacity=".6"/>` : '';
+  // obstacles Gemma 4 found on the crosswalk sit on the left; the robot steers right through the free path
+  const cones = ob?.obstacles?.length ? ob.obstacles.slice(0, 3).map((o, k) => [178 + k * 6, 112 + k * 30])
+    : ((s.hazards || []).some(h => PATH_HZ.includes(h)) || s.cosmos_tags?.blocked === 'yes') ? [[182, 120], [204, 146], [190, 174]] : [];
+  $('sCones').innerHTML = cones.map(([x, y]) => `<g transform="translate(${x},${y})"><path d="M0 -10 L8 8 L-8 8 Z" fill="#ff9f0a"/><rect x="-6" y="-1" width="12" height="3" fill="#fff" opacity=".9"/></g>`).join('')
+    + (ob?.path_blocked ? '<rect x="160" y="96" width="80" height="6" rx="3" fill="#ff453a" opacity=".85"/>' : '');
+  const lane = 200 + (steer ? 16 : 0);
+  $('sTrack').innerHTML = r.st === 'curb' && !r.held ? `<circle cx="200" cy="248" r="31" fill="none" stroke="#3a3a3c" stroke-width="2" stroke-dasharray="3 7" class="ring"/>`
+    : r.st === 'crossing' ? `<path d="M 200 236 L ${lane} 200 L ${lane} 52" stroke="#30d158" stroke-width="2" fill="none" class="dash" opacity=".6"/>` : '';
   let bub = '';
-  if (r.st === 'curb' && !r.esc && m.d !== 'NO-GO') bub = `<text x="176" y="214" class="qm">?</text><text x="216" y="206" class="qm b">?</text><text x="196" y="196" class="qm c" style="font-size:16px">?</text>`;
+  if (r.st === 'curb' && !r.esc && m.d !== 'NO-GO' && !r.held) bub = `<text x="176" y="214" class="qm">?</text><text x="216" y="206" class="qm b">?</text><text x="196" y="196" class="qm c" style="font-size:16px">?</text>`;
+  else if (r.st === 'curb' && r.held && !r.esc) bub = `<text x="200" y="206" text-anchor="middle" fill="#ff9f0a" style="font:600 10px var(--font)">${m.sig === 'flashing' ? 'next WALK…' : 'waiting for WALK'}</text>`;
   else if (m.d === 'NO-GO' && r.st !== 'across' && r.st !== 'reroute') bub = `<text x="200" y="${(y - 36).toFixed(0)}" text-anchor="middle" class="qm" style="fill:#ff453a;font-size:26px">!</text>`;
   else if (r.st === 'across') bub = `<text x="200" y="30" text-anchor="middle" fill="#30d158" style="font:700 14px var(--font)">✓ Across</text>`;
   $('sBub').innerHTML = bub;
@@ -678,7 +774,7 @@ function updateRobot(t, mi) {
       <g transform="translate(290,268)"><rect x="-4" y="-16" width="104" height="24" rx="12" fill="rgba(255,69,58,.18)" stroke="#ff453a"/>
       <text x="48" y="0" text-anchor="middle" fill="#ff8a80" style="font:600 11px var(--font)">Calling operator…</text></g>`;
   $('sFx').innerHTML = fx;
-  $('sLbl').textContent = `ROBOT VIEW · ${r.st === 'reroute' ? 'REROUTING' : r.st === 'crossing' ? 'CROSSING' : r.st === 'yield' ? 'YIELDING' : r.st === 'across' ? 'ACROSS' : r.esc ? 'ESCALATED' : m.d}`;
+  $('sLbl').textContent = `ROBOT VIEW · ${r.st === 'reroute' ? 'REROUTING' : r.st === 'crossing' ? 'CROSSING' : r.st === 'yield' ? 'YIELDING' : r.st === 'across' ? 'ACROSS' : r.esc ? 'ESCALATED' : r.held && m.d !== 'NO-GO' ? 'HOLDING FOR WALK' : m.d}`;
 }
 
 /* ---------- scorecard ---------- */
@@ -698,6 +794,27 @@ async function loadCard() {
     scales: { x: { stacked: true, max: 100, ticks: { callback: v => v + '%' }, grid: { color: 'rgba(255,255,255,.06)' }, border: { display: false } },
               y: { stacked: true, ticks: { color: '#f5f5f7' }, grid: { display: false }, border: { display: false } } },
     plugins: { legend: { position: 'bottom', labels: { boxWidth: 8, boxHeight: 8, usePointStyle: true } }, tooltip: { callbacks: { label: c => `${c.dataset.label}: ${c.raw}% of time` } } } } });
+}
+
+/* ---------- impact: segment-level vs frame-level policy replay ---------- */
+async function loadImpact() {
+  const rows = await api('api/policy-eval');
+  if (!rows.length) return;
+  const sum = (k, f) => rows.reduce((a, r) => a + (r[k][f] || 0), 0);
+  const walks = rows.filter(r => r.walk_onset_s != null);
+  const kpi = (a, b, label) => `<div class="kpi"><b><s>${a}</s>${b}</b><span>${label}</span></div>`;
+  $('kpis').innerHTML = kpi(sum('segment', 'against_signal'), sum('moment', 'against_signal'), "Starts against DON'T WALK")
+    + kpi(sum('segment', 'crossings'), sum('moment', 'crossings'), `Crossings completed in ${rows.length} clips`)
+    + (walks.length ? kpi(walks.map(r => r.segment.missed_walk_s?.toFixed(1) ?? '—').join(', ') + ' s', walks.map(r => r.moment.missed_walk_s?.toFixed(1) ?? '—').join(', ') + ' s', 'WALK lit → robot rolling') : '');
+  const cell = (v, bad) => `<td class="${bad ? 'bad' : ''}">${v ?? '—'}</td>`;
+  $('pe').innerHTML = `<tr><th>Clip</th><th>Policy</th><th>Crossings</th><th>First start</th><th>Against signal</th><th>Vehicle in path ≤ 2 s</th><th>Walk → start</th></tr>` +
+    rows.map(r => ['segment', 'moment'].map((k, j) => {
+      const x = r[k];
+      return `<tr>${j ? '' : `<td rowspan="2">${esc(pretty(r.camera_id))}${r.camera_id.startsWith('nyc') ? ' · #' + (r.video.match(/chunk_00(\d+)/)?.[1] || '') : ''}</td>`}
+        <td>${k === 'segment' ? 'Segment LLM (5 s)' : '<b>CrossWise frames (0.2 s)</b>'}</td>${cell(x.crossings)}${cell(x.first_start_s != null ? x.first_start_s + ' s' : null)}
+        ${cell(x.against_signal, x.against_signal > 0)}${cell(x.unsafe_start, x.unsafe_start > 0)}
+        ${cell(x.missed_walk_s != null ? x.missed_walk_s.toFixed(1) + ' s' : (r.walk_onset_s != null ? 'missed' : null), x.missed_walk_s == null && r.walk_onset_s != null)}</tr>`;
+    }).join('')).join('');
 }
 
 /* ---------- search ---------- */
@@ -741,7 +858,7 @@ $('clip').onchange = e => { setMode('review'); loadClip(e.target.value); };
 $('tiles').onclick = e => { const t = e.target.closest('.tile'); if (t) { setMode('review'); loadClip(t.dataset.v); } };
 function setN(n) {
   N = Math.max(2, Math.min(12, n)); $('nVal').textContent = N * 5;
-  if (T && !adhoc) { ({ M, F, R, ESC, zone: Z } = simulate(T)); lastRobotKey = ''; render(true); }
+  if (T && !adhoc) { ({ M, F, R, ESC, zone: Z, SEGD } = simulate(T)); lastRobotKey = ''; render(true); }
   loadCard();
 }
 $('nMinus').onclick = () => setN(N - 1); $('nPlus').onclick = () => setN(N + 1);
@@ -754,6 +871,7 @@ addEventListener('resize', () => render(true));
 
 loadClips().catch(e => { $('say').textContent = 'Failed to load clips: ' + e.message; });
 loadCard().catch(() => {});
+loadImpact().catch(() => {});
 </script>
 </body>
 </html>

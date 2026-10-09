@@ -6,6 +6,7 @@ Routes (Ingress strips /app, so everything is served from /):
   GET /api/clips             clips with decisions (demo clips first)
   GET /api/timeline?video=&n=  per-segment decisions + escalations for one clip
   GET /api/scorecard?n=      crossing difficulty ranking per camera
+  GET /api/policy-eval       segment-level vs frame-level policy replay on the demo clips (policy_eval.py)
   GET /api/search?q=         VSS semantic search, restricted to the street cameras
   GET /video?source=         VSS video proxy with Range support (the JWT never reaches the browser)
   GET /label                 blind human-labelling page (20 segments, safe / unsafe)
@@ -53,6 +54,10 @@ try:
     PERCEPTION = json.loads(_find("perception.json").read_text())
 except FileNotFoundError:
     PERCEPTION = {}
+try:
+    POLICY_EVAL = json.loads(_find("policy_eval.json").read_text())
+except FileNotFoundError:
+    POLICY_EVAL = []
 INDEX_HTML = (HERE / "index.html").read_bytes()
 LABEL_HTML = (HERE / "label.html").read_bytes()
 LOGO = (HERE / "logo.jpg").read_bytes() if (HERE / "logo.jpg").exists() else b""
@@ -191,6 +196,8 @@ class Handler(BaseHTTPRequestHandler):
             if url.path == "/api/timeline":
                 t = timeline(qs.get("video", ""), n)
                 return self._send(200, t) if t else self._send(404, {"error": "unknown clip"})
+            if url.path == "/api/policy-eval":
+                return self._send(200, POLICY_EVAL)
             if url.path == "/api/scorecard":
                 return self._send(200, agent.scorecard(DECISIONS, n))
             if url.path == "/api/search":

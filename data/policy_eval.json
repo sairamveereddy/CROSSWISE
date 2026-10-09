@@ -1,0 +1,143 @@
+[
+ {
+  "video": "s3://team-48-vss-chunks/team-48/20261001_101322_sf4_chunk_0015.mp4",
+  "camera_id": "sf_streets_cam-4",
+  "cross_s": 10.0,
+  "duration_s": 30.0,
+  "signal_read": false,
+  "walk_onset_s": null,
+  "segment": {
+   "crossings": 0,
+   "first_start_s": null,
+   "unsafe_start": 0,
+   "against_signal": 0,
+   "start_times": [],
+   "missed_walk_s": null
+  },
+  "moment": {
+   "crossings": 3,
+   "first_start_s": 0.6,
+   "unsafe_start": 1,
+   "against_signal": 0,
+   "start_times": [
+    0.6,
+    17.0,
+    28.6
+   ],
+   "missed_walk_s": null
+  }
+ },
+ {
+  "video": "s3://team-48-vss-chunks/team-48/20261001_094630_sf1_chunk_0013.mp4",
+  "camera_id": "sf_streets_cam-1",
+  "cross_s": 7.5,
+  "duration_s": 30.0,
+  "signal_read": false,
+  "walk_onset_s": null,
+  "segment": {
+   "crossings": 2,
+   "first_start_s": 10.0,
+   "unsafe_start": 1,
+   "against_signal": 0,
+   "start_times": [
+    10.0,
+    20.0
+   ],
+   "missed_walk_s": null
+  },
+  "moment": {
+   "crossings": 2,
+   "first_start_s": 10.8,
+   "unsafe_start": 1,
+   "against_signal": 0,
+   "start_times": [
+    10.8,
+    21.4
+   ],
+   "missed_walk_s": null
+  }
+ },
+ {
+  "video": "s3://team-48-vss-chunks/team-48/20261008_065653_VID_20261006_171812_002_chunk_0029.mp4",
+  "camera_id": "nyc_streets_cam-1",
+  "cross_s": 6.9,
+  "duration_s": 30.0,
+  "signal_read": true,
+  "walk_onset_s": null,
+  "segment": {
+   "crossings": 0,
+   "first_start_s": null,
+   "unsafe_start": 0,
+   "against_signal": 0,
+   "start_times": [],
+   "missed_walk_s": null
+  },
+  "moment": {
+   "crossings": 2,
+   "first_start_s": 0.6,
+   "unsafe_start": 1,
+   "against_signal": 0,
+   "start_times": [
+    0.6,
+    9.2
+   ],
+   "missed_walk_s": null
+  }
+ },
+ {
+  "video": "s3://team-48-vss-chunks/team-48/20261008_065328_VID_20261006_171812_002_chunk_0021.mp4",
+  "camera_id": "nyc_streets_cam-1",
+  "cross_s": 6.9,
+  "duration_s": 30.0,
+  "signal_read": true,
+  "walk_onset_s": null,
+  "segment": {
+   "crossings": 2,
+   "first_start_s": 15.0,
+   "unsafe_start": 1,
+   "against_signal": 2,
+   "start_times": [
+    15.0,
+    23.6
+   ],
+   "missed_walk_s": null
+  },
+  "moment": {
+   "crossings": 0,
+   "first_start_s": null,
+   "unsafe_start": 0,
+   "against_signal": 0,
+   "start_times": [],
+   "missed_walk_s": null
+  }
+ },
+ {
+  "video": "s3://team-48-vss-chunks/team-48/20261008_065354_VID_20261006_171812_002_chunk_0022.mp4",
+  "camera_id": "nyc_streets_cam-1",
+  "cross_s": 6.9,
+  "duration_s": 30.0,
+  "signal_read": true,
+  "walk_onset_s": 21.6,
+  "segment": {
+   "crossings": 2,
+   "first_start_s": 0.0,
+   "unsafe_start": 1,
+   "against_signal": 1,
+   "start_times": [
+    0.0,
+    25.0
+   ],
+   "missed_walk_s": 3.4
+  },
+  "moment": {
+   "crossings": 1,
+   "first_start_s": 22.6,
+   "unsafe_start": 0,
+   "against_signal": 0,
+   "start_times": [
+    22.6
+   ],
+   "missed_walk_s": 1.0
+  }
+ }
+]
