@@ -1,0 +1,77 @@
+# CrossWise app: public python image + code from ConfigMap + VSS creds from Secret, Ingress /app.
+# Applied by deploy.sh (which substitutes APP_HOST). No secrets in this file.
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: crosswise
+  labels: {app: crosswise}
+spec:
+  replicas: 1
+  selector:
+    matchLabels: {app: crosswise}
+  template:
+    metadata:
+      labels: {app: crosswise}
+    spec:
+      containers:
+      - name: app
+        image: python:3.12-slim
+        imagePullPolicy: IfNotPresent
+        ports:
+        - containerPort: 8080
+        env:
+        - {name: PORT, value: "8080"}
+        - {name: PYTHONUNBUFFERED, value: "1"}
+        - name: VSS_URL
+          valueFrom: {secretKeyRef: {name: crosswise-vss-creds, key: VSS_URL}}
+        - name: VSS_USERNAME
+          valueFrom: {secretKeyRef: {name: crosswise-vss-creds, key: VSS_USERNAME}}
+        - name: VSS_PASSWORD
+          valueFrom: {secretKeyRef: {name: crosswise-vss-creds, key: VSS_PASSWORD}}
+        volumeMounts:
+        - {name: code, mountPath: /code}
+        workingDir: /code
+        command: ["python", "main.py"]
+        readinessProbe:
+          httpGet: {path: /health, port: 8080}
+          initialDelaySeconds: 3
+          periodSeconds: 10
+        resources:
+          requests: {cpu: 100m, memory: 128Mi}
+          limits: {memory: 512Mi}
+      volumes:
+      - name: code
+        configMap: {name: crosswise-code}
+---
+apiVersion: v1
+kind: Service
+metadata:
+  name: crosswise
+  labels: {app: crosswise}
+spec:
+  selector: {app: crosswise}
+  ports:
+  - {name: http, port: 80, targetPort: 8080}
+  type: ClusterIP
+---
+apiVersion: networking.k8s.io/v1
+kind: Ingress
+metadata:
+  name: crosswise
+  labels: {app: crosswise}
+  annotations:
+    nginx.ingress.kubernetes.io/rewrite-target: /$2
+    nginx.ingress.kubernetes.io/proxy-buffering: "off"
+    nginx.ingress.kubernetes.io/proxy-read-timeout: "300"
+spec:
+  ingressClassName: nginx
+  rules:
+  - host: APP_HOST
+    http:
+      paths:
+      - path: /app(/|$)(.*)
+        pathType: ImplementationSpecific
+        backend:
+          service:
+            name: crosswise
+            port: {number: 80}

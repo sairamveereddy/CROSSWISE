@@ -1,0 +1,362 @@
+[
+ {
+  "original_video": "s3://team-48-vss-chunks/team-48/20261001_101322_sf4_chunk_0015.mp4",
+  "source": "s3://team-48-vss-chunks-segments/segments/20261001_101322_sf4_chunk_0015_segment_001_of_006.mp4",
+  "camera_id": "sf_streets_cam-4",
+  "location": "san_francisco",
+  "segment_number": 1,
+  "start_sec": 0.0,
+  "end_sec": 5.0,
+  "object_counts": "{\"bus\": 1, \"car\": 6, \"person\": 8, \"traffic light\": 1, \"truck\": 2}",
+  "caption": "The traffic light is red. Vehicles are stopped at the intersection, with some positioned near the crosswalk. Pedestrians are waiting at the curb, preparing to cross. There are no cyclists visible in the scene. The crosswalk and curb are clear of any obstructions. SIGNAL=red VEHICLES=stopped PEDS=waiting BLOCKED=no CROSS=wait",
+  "tags": {
+   "signal": "red",
+   "vehicles": "stopped",
+   "peds": "waiting",
+   "blocked": "no",
+   "cross": "wait"
+  },
+  "caption_model": "nvidia/cosmos3-nano-reasoner",
+  "caption_latency_s": 4.25
+ },
+ {
+  "original_video": "s3://team-48-vss-chunks/team-48/20261001_101322_sf4_chunk_0015.mp4",
+  "source": "s3://team-48-vss-chunks-segments/segments/20261001_101322_sf4_chunk_0015_segment_002_of_006.mp4",
+  "camera_id": "sf_streets_cam-4",
+  "location": "san_francisco",
+  "segment_number": 2,
+  "start_sec": 5.0,
+  "end_sec": 10.0,
+  "object_counts": "{\"car\": 7, \"traffic light\": 1, \"person\": 6, \"bus\": 2}",
+  "caption": "The traffic light is red. A dark-colored car is stopped at the intersection, waiting for the light to change. Pedestrians are waiting on the sidewalk, preparing to cross. There are no cyclists visible. The crosswalk is clear, with no obstructions. SIGNAL=red VEHICLES=stopped PEDS=waiting BLOCKED=no CROSS=wait",
+  "tags": {
+   "signal": "red",
+   "vehicles": "stopped",
+   "peds": "waiting",
+   "blocked": "no",
+   "cross": "wait"
+  },
+  "caption_model": "nvidia/cosmos3-nano-reasoner",
+  "caption_latency_s": 3.1
+ },
+ {
+  "original_video": "s3://team-48-vss-chunks/team-48/20261001_101322_sf4_chunk_0015.mp4",
+  "source": "s3://team-48-vss-chunks-segments/segments/20261001_101322_sf4_chunk_0015_segment_003_of_006.mp4",
+  "camera_id": "sf_streets_cam-4",
+  "location": "san_francisco",
+  "segment_number": 3,
+  "start_sec": 10.0,
+  "end_sec": 15.0,
+  "object_counts": "{\"car\": 8, \"bus\": 1, \"traffic light\": 2, \"person\": 5}",
+  "caption": "The traffic light is red, and the walk signal is not visible. Vehicles are moving through the intersection, including a bus that passes over the crosswalk. Pedestrians are waiting on the sidewalk, not crossing. There are no cyclists in the scene. The crosswalk is clear of any obstructions. SIGNAL=red VEHICLES=moving PEDS=waiting BLOCKED=no CROSS=wait",
+  "tags": {
+   "signal": "red",
+   "vehicles": "moving",
+   "peds": "waiting",
+   "blocked": "no",
+   "cross": "wait"
+  },
+  "caption_model": "nvidia/cosmos3-nano-reasoner",
+  "caption_latency_s": 3.1
+ },
+ {
+  "original_video": "s3://team-48-vss-chunks/team-48/20261001_101322_sf4_chunk_0015.mp4",
+  "source": "s3://team-48-vss-chunks-segments/segments/20261001_101322_sf4_chunk_0015_segment_004_of_006.mp4",
+  "camera_id": "sf_streets_cam-4",
+  "location": "san_francisco",
+  "segment_number": 4,
+  "start_sec": 15.0,
+  "end_sec": 20.0,
+  "object_counts": "{\"bus\": 1, \"traffic light\": 1, \"person\": 9, \"car\": 6, \"truck\": 1}",
+  "caption": "The traffic light is red. Pedestrians are waiting to cross. No vehicles are moving into the crosswalk. No cyclists are present. The crosswalk is clear. SIGNAL=red VEHICLES=none PEDS=waiting BLOCKED=no CROSS=wait",
+  "tags": {
+   "signal": "red",
+   "vehicles": "none",
+   "peds": "waiting",
+   "blocked": "no",
+   "cross": "wait"
+  },
+  "caption_model": "nvidia/cosmos3-nano-reasoner",
+  "caption_latency_s": 4.39
+ },
+ {
+  "original_video": "s3://team-48-vss-chunks/team-48/20261001_101322_sf4_chunk_0015.mp4",
+  "source": "s3://team-48-vss-chunks-segments/segments/20261001_101322_sf4_chunk_0015_segment_005_of_006.mp4",
+  "camera_id": "sf_streets_cam-4",
+  "location": "san_francisco",
+  "segment_number": 5,
+  "start_sec": 20.0,
+  "end_sec": 25.0,
+  "object_counts": "{\"car\": 6, \"traffic light\": 1, \"person\": 10, \"bus\": 1, \"truck\": 1, \"skateboard\": 2}",
+  "caption": "The traffic light is red, and the walk signal is not visible. Vehicles are stopped at the intersection, including a bus and several cars. Pedestrians are waiting at the curb and some are beginning to cross the street. Cyclists are present on the road, moving through the intersection. The crosswalk is clear of obstructions, but the presence of stopped vehicles and pedestrians requires attention. SIGNAL=red VEHICLES=stopped PEDS=crossing BLOCKED=no CROSS=wait",
+  "tags": {
+   "signal": "red",
+   "vehicles": "stopped",
+   "peds": "crossing",
+   "blocked": "no",
+   "cross": "wait"
+  },
+  "caption_model": "nvidia/cosmos3-nano-reasoner",
+  "caption_latency_s": 4.05
+ },
+ {
+  "original_video": "s3://team-48-vss-chunks/team-48/20261001_101322_sf4_chunk_0015.mp4",
+  "source": "s3://team-48-vss-chunks-segments/segments/20261001_101322_sf4_chunk_0015_segment_006_of_006.mp4",
+  "camera_id": "sf_streets_cam-4",
+  "location": "san_francisco",
+  "segment_number": 6,
+  "start_sec": 25.0,
+  "end_sec": 30.0,
+  "object_counts": "{\"person\": 9, \"car\": 7, \"bus\": 1, \"traffic light\": 1, \"truck\": 1}",
+  "caption": "The traffic light is green. A black car is moving through the crosswalk, and a white car is approaching the intersection. Pedestrians are waiting on the sidewalk and crossing the street at the crosswalk. There are no cyclists visible. The crosswalk is partially blocked by the moving black car. SIGNAL=green VEHICLES=moving PEDS=crossing BLOCKED=yes CROSS=wait",
+  "tags": {
+   "signal": "green",
+   "vehicles": "moving",
+   "peds": "crossing",
+   "blocked": "yes",
+   "cross": "wait"
+  },
+  "caption_model": "nvidia/cosmos3-nano-reasoner",
+  "caption_latency_s": 4.5
+ },
+ {
+  "original_video": "s3://team-48-vss-chunks/team-48/20261001_094630_sf1_chunk_0013.mp4",
+  "source": "s3://team-48-vss-chunks-segments/segments/20261001_094630_sf1_chunk_0013_segment_001_of_006.mp4",
+  "camera_id": "sf_streets_cam-1",
+  "location": "san_francisco",
+  "segment_number": 1,
+  "start_sec": 0.0,
+  "end_sec": 5.0,
+  "object_counts": "{\"car\": 6, \"bicycle\": 1, \"truck\": 2, \"person\": 9, \"parking meter\": 2, \"traffic light\": 2, \"bus\": 1, \"backpack\": 1, \"fire hydrant\": 1, \"bench\": 1}",
+  "caption": "The traffic light is green, and the walk signal is visible. Vehicles are moving through the intersection, with some turning into the crosswalk. Pedestrians are waiting at the curb and others are crossing the street. Cyclists are present on the road. The curb and crosswalk are not blocked. SIGNAL=green VEHICLES=turning PEDS=crossing BLOCKED=no CROSS=go",
+  "tags": {
+   "signal": "green",
+   "vehicles": "turning",
+   "peds": "crossing",
+   "blocked": "no",
+   "cross": "go"
+  },
+  "caption_model": "nvidia/cosmos3-nano-reasoner",
+  "caption_latency_s": 3.56
+ },
+ {
+  "original_video": "s3://team-48-vss-chunks/team-48/20261001_094630_sf1_chunk_0013.mp4",
+  "source": "s3://team-48-vss-chunks-segments/segments/20261001_094630_sf1_chunk_0013_segment_002_of_006.mp4",
+  "camera_id": "sf_streets_cam-1",
+  "location": "san_francisco",
+  "segment_number": 2,
+  "start_sec": 5.0,
+  "end_sec": 10.0,
+  "object_counts": "{\"bicycle\": 1, \"truck\": 3, \"car\": 5, \"person\": 5, \"parking meter\": 2, \"bench\": 1, \"traffic light\": 1, \"bus\": 1, \"fire hydrant\": 1, \"backpack\": 2}",
+  "caption": "The traffic light is green, and a white walk signal is visible. A red fire truck is moving through the intersection, and a gray pickup truck is stopped at the intersection. Pedestrians are waiting to cross at the crosswalk. There are no cyclists present. The crosswalk is not blocked. SIGNAL=green VEHICLES=turning PEDS=waiting BLOCKED=no CROSS=wait",
+  "tags": {
+   "signal": "green",
+   "vehicles": "turning",
+   "peds": "waiting",
+   "blocked": "no",
+   "cross": "wait"
+  },
+  "caption_model": "nvidia/cosmos3-nano-reasoner",
+  "caption_latency_s": 3.62
+ },
+ {
+  "original_video": "s3://team-48-vss-chunks/team-48/20261001_094630_sf1_chunk_0013.mp4",
+  "source": "s3://team-48-vss-chunks-segments/segments/20261001_094630_sf1_chunk_0013_segment_003_of_006.mp4",
+  "camera_id": "sf_streets_cam-1",
+  "location": "san_francisco",
+  "segment_number": 3,
+  "start_sec": 10.0,
+  "end_sec": 15.0,
+  "object_counts": "{\"person\": 9, \"truck\": 2, \"bicycle\": 1, \"car\": 6, \"bus\": 1, \"parking meter\": 2, \"backpack\": 2, \"bench\": 1, \"handbag\": 1, \"traffic light\": 1, \"fire hydrant\": 1, \"motorcycle\": 1}",
+  "caption": "The traffic light is green. Vehicles are moving through the intersection. Pedestrians are crossing the street. There are no obstacles blocking the curb or crosswalk. SIGNAL=green VEHICLES=unclear PEDS=crossing BLOCKED=no CROSS=go",
+  "tags": {
+   "signal": "green",
+   "vehicles": "unclear",
+   "peds": "crossing",
+   "blocked": "no",
+   "cross": "go"
+  },
+  "caption_model": "nvidia/cosmos3-nano-reasoner",
+  "caption_latency_s": 3.31
+ },
+ {
+  "original_video": "s3://team-48-vss-chunks/team-48/20261001_094630_sf1_chunk_0013.mp4",
+  "source": "s3://team-48-vss-chunks-segments/segments/20261001_094630_sf1_chunk_0013_segment_004_of_006.mp4",
+  "camera_id": "sf_streets_cam-1",
+  "location": "san_francisco",
+  "segment_number": 4,
+  "start_sec": 15.0,
+  "end_sec": 20.0,
+  "object_counts": "{\"bicycle\": 1, \"person\": 9, \"car\": 7, \"truck\": 1, \"backpack\": 2, \"parking meter\": 2, \"traffic light\": 1, \"bus\": 1, \"bench\": 1, \"fire hydrant\": 1}",
+  "caption": "The traffic light is green, and a white walk signal is visible. Vehicles are moving through the intersection, with some turning into the crosswalk. Pedestrians are both waiting at the curb and crossing the street. A few cyclists are present, and there is a parked car partially blocking the curb. The crosswalk is partially obstructed by the parked car and other pedestrians. SIGNAL=green VEHICLES=turning PEDS=crossing BLOCKED=yes CROSS=wait",
+  "tags": {
+   "signal": "green",
+   "vehicles": "turning",
+   "peds": "crossing",
+   "blocked": "yes",
+   "cross": "wait"
+  },
+  "caption_model": "nvidia/cosmos3-nano-reasoner",
+  "caption_latency_s": 5.24
+ },
+ {
+  "original_video": "s3://team-48-vss-chunks/team-48/20261001_094630_sf1_chunk_0013.mp4",
+  "source": "s3://team-48-vss-chunks-segments/segments/20261001_094630_sf1_chunk_0013_segment_005_of_006.mp4",
+  "camera_id": "sf_streets_cam-1",
+  "location": "san_francisco",
+  "segment_number": 5,
+  "start_sec": 20.0,
+  "end_sec": 25.0,
+  "object_counts": "{\"person\": 9, \"car\": 3, \"bicycle\": 1, \"truck\": 2, \"parking meter\": 2, \"bench\": 1, \"fire hydrant\": 1, \"traffic light\": 1, \"bus\": 1}",
+  "caption": "The traffic light is green. A UPS truck is moving through the intersection. Pedestrians are crossing the street. No vehicles are stopped or turning into the crosswalk. No obstacles are blocking the curb or crosswalk. SIGNAL=green VEHICLES=none PEDS=crossing BLOCKED=no CROSS=go",
+  "tags": {
+   "signal": "green",
+   "vehicles": "none",
+   "peds": "crossing",
+   "blocked": "no",
+   "cross": "go"
+  },
+  "caption_model": "nvidia/cosmos3-nano-reasoner",
+  "caption_latency_s": 2.86
+ },
+ {
+  "original_video": "s3://team-48-vss-chunks/team-48/20261001_094630_sf1_chunk_0013.mp4",
+  "source": "s3://team-48-vss-chunks-segments/segments/20261001_094630_sf1_chunk_0013_segment_006_of_006.mp4",
+  "camera_id": "sf_streets_cam-1",
+  "location": "san_francisco",
+  "segment_number": 6,
+  "start_sec": 25.0,
+  "end_sec": 30.0,
+  "object_counts": "{\"bicycle\": 2, \"truck\": 3, \"bus\": 1, \"person\": 13, \"car\": 3, \"parking meter\": 2, \"traffic light\": 1, \"handbag\": 1, \"backpack\": 3, \"fire hydrant\": 1}",
+  "caption": "The traffic light is green, and the walk signal is visible. A UPS truck is stopped in the crosswalk, partially blocking the path. Several pedestrians are crossing the street, while others are waiting at the curb. A few cyclists are present, some moving through the intersection. The curb and crosswalk are partially obstructed by the UPS truck and other pedestrians. SIGNAL=green VEHICLES=stopped PEDS=crossing BLOCKED=yes CROSS=wait",
+  "tags": {
+   "signal": "green",
+   "vehicles": "stopped",
+   "peds": "crossing",
+   "blocked": "yes",
+   "cross": "wait"
+  },
+  "caption_model": "nvidia/cosmos3-nano-reasoner",
+  "caption_latency_s": 5.27
+ },
+ {
+  "original_video": "s3://team-48-vss-chunks/team-48/20261008_065653_VID_20261006_171812_002_chunk_0029.mp4",
+  "source": "s3://team-48-vss-chunks-segments/segments/20261008_065653_VID_20261006_171812_002_chunk_0029_segment_001_of_006.mp4",
+  "camera_id": "nyc_streets_cam-1",
+  "location": "new_york",
+  "segment_number": 1,
+  "start_sec": 0.0,
+  "end_sec": 5.0,
+  "object_counts": "{\"person\": 15, \"car\": 3, \"bicycle\": 2, \"traffic light\": 1, \"truck\": 1, \"handbag\": 2, \"backpack\": 3}",
+  "caption": "The traffic light is visible and shows a red hand, indicating pedestrians should not enter the crosswalk. A yellow taxi is stopped at the intersection, and a white truck is also stationary. Several pedestrians are waiting on the sidewalk, while others are crossing the street. There are no cyclists present. The crosswalk is partially blocked by orange traffic cones and a red barrier. SIGNAL=red VEHICLES=stopped PEDS=crossing BLOCKED=yes CROSS=wait",
+  "tags": {
+   "signal": "red",
+   "vehicles": "stopped",
+   "peds": "crossing",
+   "blocked": "yes",
+   "cross": "wait"
+  },
+  "caption_model": "nvidia/cosmos3-nano-reasoner",
+  "caption_latency_s": 5.26
+ },
+ {
+  "original_video": "s3://team-48-vss-chunks/team-48/20261008_065653_VID_20261006_171812_002_chunk_0029.mp4",
+  "source": "s3://team-48-vss-chunks-segments/segments/20261008_065653_VID_20261006_171812_002_chunk_0029_segment_002_of_006.mp4",
+  "camera_id": "nyc_streets_cam-1",
+  "location": "new_york",
+  "segment_number": 2,
+  "start_sec": 5.0,
+  "end_sec": 10.0,
+  "object_counts": "{\"person\": 14, \"car\": 3, \"truck\": 2, \"bicycle\": 1, \"backpack\": 2, \"traffic light\": 1, \"handbag\": 2, \"fire hydrant\": 1, \"tennis racket\": 1, \"chair\": 1}",
+  "caption": "The traffic light is visible and shows a red hand, indicating pedestrians should not enter the crosswalk. A yellow taxi is stopped at the intersection, not moving into the crosswalk. Several pedestrians are waiting on the sidewalk and some are beginning to cross the street, but the red hand signal suggests they should wait. There are no cyclists visible in the scene. The crosswalk is partially blocked by orange construction barriers and cones, which are positioned near the curb. The barriers and cones are clearly obstructing part of the crosswalk area.\n\nSIGNAL=red VEHICLES=stopped PEDS=waiting BLOCKED=yes CROSS=wait",
+  "tags": {
+   "signal": "red",
+   "vehicles": "stopped",
+   "peds": "waiting",
+   "blocked": "yes",
+   "cross": "wait"
+  },
+  "caption_model": "nvidia/cosmos3-nano-reasoner",
+  "caption_latency_s": 9.08
+ },
+ {
+  "original_video": "s3://team-48-vss-chunks/team-48/20261008_065653_VID_20261006_171812_002_chunk_0029.mp4",
+  "source": "s3://team-48-vss-chunks-segments/segments/20261008_065653_VID_20261006_171812_002_chunk_0029_segment_003_of_006.mp4",
+  "camera_id": "nyc_streets_cam-1",
+  "location": "new_york",
+  "segment_number": 3,
+  "start_sec": 10.0,
+  "end_sec": 15.0,
+  "object_counts": "{\"person\": 13, \"car\": 2, \"bicycle\": 1, \"traffic light\": 2, \"truck\": 2, \"handbag\": 2, \"backpack\": 1, \"umbrella\": 1}",
+  "caption": "The traffic light is red with a hand symbol, indicating pedestrians should not enter the crosswalk. A yellow taxi and a white van are stopped at the intersection, not moving into the crosswalk. Pedestrians are waiting on the sidewalk and beginning to cross the street, while others are walking along the sidewalk. There are no cyclists visible. The crosswalk is partially blocked by orange traffic cones and a red barrier, but the main path remains clear. SIGNAL=red VEHICLES=stopped PEDS=crossing BLOCKED=yes CROSS=wait",
+  "tags": {
+   "signal": "red",
+   "vehicles": "stopped",
+   "peds": "crossing",
+   "blocked": "yes",
+   "cross": "wait"
+  },
+  "caption_model": "nvidia/cosmos3-nano-reasoner",
+  "caption_latency_s": 8.35
+ },
+ {
+  "original_video": "s3://team-48-vss-chunks/team-48/20261008_065653_VID_20261006_171812_002_chunk_0029.mp4",
+  "source": "s3://team-48-vss-chunks-segments/segments/20261008_065653_VID_20261006_171812_002_chunk_0029_segment_004_of_006.mp4",
+  "camera_id": "nyc_streets_cam-1",
+  "location": "new_york",
+  "segment_number": 4,
+  "start_sec": 15.0,
+  "end_sec": 20.0,
+  "object_counts": "{\"person\": 12, \"car\": 3, \"handbag\": 1, \"truck\": 1, \"bicycle\": 2, \"traffic light\": 2, \"fire hydrant\": 1, \"backpack\": 2}",
+  "caption": "The traffic light is red with a pedestrian hand signal. A yellow taxi is stopped at the intersection, and a white truck is also stopped. Pedestrians are crossing the street, and some are waiting on the sidewalk. There are no cyclists visible. The crosswalk is partially blocked by orange traffic cones and a red barrier. SIGNAL=red VEHICLES=stopped PEDS=crossing BLOCKED=yes CROSS=wait",
+  "tags": {
+   "signal": "red",
+   "vehicles": "stopped",
+   "peds": "crossing",
+   "blocked": "yes",
+   "cross": "wait"
+  },
+  "caption_model": "nvidia/cosmos3-nano-reasoner",
+  "caption_latency_s": 4.4
+ },
+ {
+  "original_video": "s3://team-48-vss-chunks/team-48/20261008_065653_VID_20261006_171812_002_chunk_0029.mp4",
+  "source": "s3://team-48-vss-chunks-segments/segments/20261008_065653_VID_20261006_171812_002_chunk_0029_segment_005_of_006.mp4",
+  "camera_id": "nyc_streets_cam-1",
+  "location": "new_york",
+  "segment_number": 5,
+  "start_sec": 20.0,
+  "end_sec": 25.0,
+  "object_counts": "{\"car\": 3, \"person\": 8, \"truck\": 1, \"traffic light\": 2, \"bicycle\": 2, \"fire hydrant\": 1, \"backpack\": 1, \"skateboard\": 1, \"bench\": 1}",
+  "caption": "The traffic light is red with a flashing hand signal. A yellow taxi is stopped at the intersection, and a white van is also stopped. Pedestrians are crossing the street, and a person on a scooter is moving through the crosswalk. There are no obstructions blocking the curb or crosswalk. SIGNAL=red VEHICLES=stopped PEDS=crossing BLOCKED=no CROSS=wait",
+  "tags": {
+   "signal": "red",
+   "vehicles": "stopped",
+   "peds": "crossing",
+   "blocked": "no",
+   "cross": "wait"
+  },
+  "caption_model": "nvidia/cosmos3-nano-reasoner",
+  "caption_latency_s": 4.58
+ },
+ {
+  "original_video": "s3://team-48-vss-chunks/team-48/20261008_065653_VID_20261006_171812_002_chunk_0029.mp4",
+  "source": "s3://team-48-vss-chunks-segments/segments/20261008_065653_VID_20261006_171812_002_chunk_0029_segment_006_of_006.mp4",
+  "camera_id": "nyc_streets_cam-1",
+  "location": "new_york",
+  "segment_number": 6,
+  "start_sec": 25.0,
+  "end_sec": 30.0,
+  "object_counts": "{\"car\": 2, \"bicycle\": 2, \"person\": 7, \"truck\": 1, \"traffic light\": 2, \"handbag\": 2}",
+  "caption": "The traffic light is red with a hand symbol, indicating pedestrians should not enter the crosswalk. A yellow taxi is stopped at the intersection, and a white truck is also stationary. Pedestrians are waiting on the sidewalk and beginning to cross the street, while others are walking along the sidewalk. There are no cyclists present. The crosswalk is partially blocked by orange traffic cones and a red barrier. SIGNAL=red VEHICLES=stopped PEDS=crossing BLOCKED=yes CROSS=wait",
+  "tags": {
+   "signal": "red",
+   "vehicles": "stopped",
+   "peds": "crossing",
+   "blocked": "yes",
+   "cross": "wait"
+  },
+  "caption_model": "nvidia/cosmos3-nano-reasoner",
+  "caption_latency_s": 6.73
+ }
+]

@@ -1,0 +1,7 @@
+# Offline pipeline (captioning, decisions, agent, evaluation). The deployed web app needs only the stdlib.
+requests>=2.31
+openai>=1.40
+weave>=0.51
+wandb>=0.18
+vastdb>=1.3
+pyarrow>=15

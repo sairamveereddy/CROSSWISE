@@ -1,0 +1,142 @@
+[
+ {
+  "item": 1,
+  "segment_id": "s3://team-48-vss-chunks-segments/segments/20261001_100133_sf2_chunk_0024_segment_004_of_006.mp4",
+  "camera_id": "sf_streets_cam-2",
+  "start_sec": 15.0,
+  "end_sec": 20.0
+ },
+ {
+  "item": 2,
+  "segment_id": "s3://team-48-vss-chunks-segments/segments/20261008_071949_IMG_0509_chunk_0021_segment_004_of_006.mp4",
+  "camera_id": "nyc_streets_cam-2",
+  "start_sec": 15.0,
+  "end_sec": 20.0
+ },
+ {
+  "item": 3,
+  "segment_id": "s3://team-48-vss-chunks-segments/segments/20261006_124711_sf5_chunk_0027_segment_001_of_006.mp4",
+  "camera_id": "sf_streets_cam-5",
+  "start_sec": 0.0,
+  "end_sec": 5.0
+ },
+ {
+  "item": 4,
+  "segment_id": "s3://team-48-vss-chunks-segments/segments/20261001_094630_sf1_chunk_0013_segment_002_of_006.mp4",
+  "camera_id": "sf_streets_cam-1",
+  "start_sec": 5.0,
+  "end_sec": 10.0
+ },
+ {
+  "item": 5,
+  "segment_id": "s3://team-48-vss-chunks-segments/segments/20261008_065653_VID_20261006_171812_002_chunk_0029_segment_003_of_006.mp4",
+  "camera_id": "nyc_streets_cam-1",
+  "start_sec": 10.0,
+  "end_sec": 15.0
+ },
+ {
+  "item": 6,
+  "segment_id": "s3://team-48-vss-chunks-segments/segments/20261001_095811_sf2_chunk_0016_segment_003_of_006.mp4",
+  "camera_id": "sf_streets_cam-2",
+  "start_sec": 10.0,
+  "end_sec": 15.0
+ },
+ {
+  "item": 7,
+  "segment_id": "s3://team-48-vss-chunks-segments/segments/20261008_071717_IMG_0509_chunk_0015_segment_006_of_006.mp4",
+  "camera_id": "nyc_streets_cam-2",
+  "start_sec": 25.0,
+  "end_sec": 30.0
+ },
+ {
+  "item": 8,
+  "segment_id": "s3://team-48-vss-chunks-segments/segments/20261001_094630_sf1_chunk_0013_segment_003_of_006.mp4",
+  "camera_id": "sf_streets_cam-1",
+  "start_sec": 10.0,
+  "end_sec": 15.0
+ },
+ {
+  "item": 9,
+  "segment_id": "s3://team-48-vss-chunks-segments/segments/20261001_094630_sf1_chunk_0013_segment_006_of_006.mp4",
+  "camera_id": "sf_streets_cam-1",
+  "start_sec": 25.0,
+  "end_sec": 30.0
+ },
+ {
+  "item": 10,
+  "segment_id": "s3://team-48-vss-chunks-segments/segments/20261001_101553_sf4_chunk_0021_segment_001_of_006.mp4",
+  "camera_id": "sf_streets_cam-4",
+  "start_sec": 0.0,
+  "end_sec": 5.0
+ },
+ {
+  "item": 11,
+  "segment_id": "s3://team-48-vss-chunks-segments/segments/20261001_100534_sf3_chunk_0003_segment_005_of_006.mp4",
+  "camera_id": "sf_streets_cam-3",
+  "start_sec": 20.0,
+  "end_sec": 25.0
+ },
+ {
+  "item": 12,
+  "segment_id": "s3://team-48-vss-chunks-segments/segments/20261001_095358_sf2_chunk_0006_segment_004_of_006.mp4",
+  "camera_id": "sf_streets_cam-2",
+  "start_sec": 15.0,
+  "end_sec": 20.0
+ },
+ {
+  "item": 13,
+  "segment_id": "s3://team-48-vss-chunks-segments/segments/20261008_065004_VID_20261006_171812_002_chunk_0013_segment_005_of_006.mp4",
+  "camera_id": "nyc_streets_cam-1",
+  "start_sec": 20.0,
+  "end_sec": 25.0
+ },
+ {
+  "item": 14,
+  "segment_id": "s3://team-48-vss-chunks-segments/segments/20261001_100443_sf3_chunk_0001_segment_002_of_006.mp4",
+  "camera_id": "sf_streets_cam-3",
+  "start_sec": 5.0,
+  "end_sec": 10.0
+ },
+ {
+  "item": 15,
+  "segment_id": "s3://team-48-vss-chunks-segments/segments/20261001_100934_sf4_chunk_0006_segment_005_of_006.mp4",
+  "camera_id": "sf_streets_cam-4",
+  "start_sec": 20.0,
+  "end_sec": 25.0
+ },
+ {
+  "item": 16,
+  "segment_id": "s3://team-48-vss-chunks-segments/segments/20261008_071239_IMG_0509_chunk_0004_segment_001_of_006.mp4",
+  "camera_id": "nyc_streets_cam-2",
+  "start_sec": 0.0,
+  "end_sec": 5.0
+ },
+ {
+  "item": 17,
+  "segment_id": "s3://team-48-vss-chunks-segments/segments/20261001_100624_sf3_chunk_0005_segment_001_of_006.mp4",
+  "camera_id": "sf_streets_cam-3",
+  "start_sec": 0.0,
+  "end_sec": 5.0
+ },
+ {
+  "item": 18,
+  "segment_id": "s3://team-48-vss-chunks-segments/segments/20261008_065653_VID_20261006_171812_002_chunk_0029_segment_001_of_006.mp4",
+  "camera_id": "nyc_streets_cam-1",
+  "start_sec": 0.0,
+  "end_sec": 5.0
+ },
+ {
+  "item": 19,
+  "segment_id": "s3://team-48-vss-chunks-segments/segments/20261001_101412_sf4_chunk_0017_segment_003_of_006.mp4",
+  "camera_id": "sf_streets_cam-4",
+  "start_sec": 10.0,
+  "end_sec": 15.0
+ },
+ {
+  "item": 20,
+  "segment_id": "s3://team-48-vss-chunks-segments/segments/20261008_071123_IMG_0509_chunk_0001_segment_003_of_006.mp4",
+  "camera_id": "nyc_streets_cam-2",
+  "start_sec": 10.0,
+  "end_sec": 15.0
+ }
+]

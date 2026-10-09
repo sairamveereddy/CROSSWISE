@@ -1,0 +1,481 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>CrossWise · crossing copilot</title>
+<script>
+  // Relative URLs need a trailing slash when served under /app (Ingress strips the prefix).
+  if (!location.pathname.endsWith('/') && !location.pathname.split('/').pop().includes('.')) {
+    location.replace(location.pathname + '/' + location.search + location.hash);
+  }
+</script>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800;900&family=JetBrains+Mono:wght@500&display=swap" rel="stylesheet">
+<script src="https://cdn.jsdelivr.net/npm/chart.js@4.4.1/dist/chart.umd.min.js"></script>
+<style>
+  :root {
+    --bg:#07090d; --card:rgba(22,27,36,.72); --card2:rgba(30,36,48,.6); --line:rgba(255,255,255,.07); --line2:rgba(255,255,255,.12);
+    --text:#eef2f7; --mute:#8a94a6; --dim:#5b6475;
+    --go:#22c55e; --wait:#f59e0b; --nogo:#ef4444; --accent:#7c9cff; --accent2:#a78bfa;
+    --led:#8a94a6;
+  }
+  * { box-sizing:border-box; }
+  html, body { margin:0; }
+  body { font:14px/1.5 Inter,system-ui,sans-serif; color:var(--text); background:var(--bg); min-height:100vh;
+         background-image:radial-gradient(1200px 600px at 10% -10%,rgba(124,156,255,.14),transparent 60%),
+                          radial-gradient(900px 500px at 100% 0%,rgba(167,139,250,.10),transparent 60%),
+                          radial-gradient(800px 600px at 50% 120%,rgba(34,197,94,.06),transparent 60%); }
+  .wrap { max-width:1440px; margin:0 auto; padding:18px 24px 40px; }
+
+  /* top bar */
+  .top { display:flex; align-items:center; gap:14px; flex-wrap:wrap; margin-bottom:18px; }
+  .brand { display:flex; align-items:center; gap:12px; }
+  .brand .logo { width:44px; height:44px; border-radius:12px; display:grid; place-items:center;
+                 background:linear-gradient(135deg,rgba(124,156,255,.25),rgba(167,139,250,.18)); border:1px solid var(--line2);
+                 box-shadow:0 8px 30px rgba(124,156,255,.18); }
+  .brand h1 { margin:0; font-size:22px; font-weight:800; letter-spacing:-.4px;
+              background:linear-gradient(90deg,#fff,#c7d2fe); -webkit-background-clip:text; background-clip:text; color:transparent; }
+  .brand p { margin:0; color:var(--mute); font-size:12.5px; }
+  .notice { margin-left:auto; display:flex; align-items:center; gap:8px; font-size:12px; color:#fcd34d;
+            border:1px solid rgba(245,158,11,.35); background:rgba(245,158,11,.08); padding:6px 12px; border-radius:999px; }
+  .stack { display:flex; gap:6px; flex-wrap:wrap; width:100%; }
+  .stack span { font-size:11px; color:var(--mute); border:1px solid var(--line); background:rgba(255,255,255,.02);
+                padding:3px 9px; border-radius:999px; }
+  .stack b { color:#cbd5e1; font-weight:600; }
+
+  .card { background:var(--card); border:1px solid var(--line); border-radius:18px; padding:16px;
+          backdrop-filter:blur(14px); -webkit-backdrop-filter:blur(14px); box-shadow:0 20px 60px rgba(0,0,0,.35); }
+  .label { font-size:11px; text-transform:uppercase; letter-spacing:1.4px; color:var(--dim); font-weight:600; margin:0 0 10px; }
+
+  /* featured crossings */
+  .tiles { display:grid; grid-template-columns:repeat(auto-fit,minmax(220px,1fr)); gap:12px; margin-bottom:16px; }
+  .tile { cursor:pointer; padding:12px 14px; border-radius:14px; border:1px solid var(--line); background:var(--card2);
+          transition:.18s; position:relative; overflow:hidden; }
+  .tile:hover { border-color:var(--line2); transform:translateY(-1px); }
+  .tile.on { border-color:rgba(124,156,255,.6); box-shadow:0 0 0 1px rgba(124,156,255,.35),0 10px 30px rgba(124,156,255,.15); }
+  .tile .t1 { font-weight:700; font-size:13.5px; }
+  .tile .t2 { color:var(--mute); font-size:12px; margin-top:2px; }
+  .mini { display:flex; gap:2px; margin-top:10px; height:6px; }
+  .mini i { flex:1; border-radius:3px; }
+
+  .grid { display:grid; grid-template-columns:minmax(0,1.65fr) minmax(340px,1fr); gap:16px; }
+  .grid2 { display:grid; grid-template-columns:minmax(0,1.25fr) minmax(0,1fr); gap:16px; margin-top:16px; }
+  @media (max-width:1050px) { .grid, .grid2 { grid-template-columns:1fr; } .notice { margin-left:0; } }
+
+  /* player */
+  .controls { display:flex; gap:10px; align-items:center; flex-wrap:wrap; margin-bottom:12px; }
+  select, input { background:rgba(0,0,0,.35); color:var(--text); border:1px solid var(--line2); border-radius:10px;
+                  padding:8px 12px; font:inherit; outline:none; }
+  select:focus, input:focus { border-color:rgba(124,156,255,.6); }
+  #clip { flex:1 1 280px; min-width:220px; }
+  .seg-ctl { display:inline-flex; padding:3px; border-radius:12px; background:rgba(0,0,0,.35); border:1px solid var(--line2); }
+  .seg-ctl button { border:0; background:transparent; color:var(--mute); padding:7px 14px; border-radius:9px; font:600 13px Inter; cursor:pointer; }
+  .seg-ctl button.on { background:linear-gradient(135deg,#4f6bff,#8b5cf6); color:#fff; box-shadow:0 6px 18px rgba(99,102,241,.35); }
+  .stepper { display:inline-flex; align-items:center; gap:8px; color:var(--mute); font-size:12.5px; }
+  .stepper input { width:58px; text-align:center; padding:7px 6px; }
+
+  .stage { position:relative; border-radius:14px; overflow:hidden; background:#000; aspect-ratio:16/9; border:1px solid var(--line); }
+  .stage video { position:absolute; inset:0; width:100%; height:100%; object-fit:contain; opacity:0; transition:opacity .12s; }
+  .stage video.on { opacity:1; }
+  .stage .shade { position:absolute; inset:auto 0 0 0; height:90px; background:linear-gradient(transparent,rgba(0,0,0,.65)); pointer-events:none; }
+  .tag-replay { position:absolute; top:12px; left:12px; display:none; align-items:center; gap:6px; background:rgba(239,68,68,.9);
+                color:#fff; font:800 11px Inter; letter-spacing:1.6px; padding:5px 10px; border-radius:6px; }
+  .tag-replay.on { display:flex; }
+  .tag-replay::before { content:""; width:7px; height:7px; border-radius:50%; background:#fff; animation:blink 1s infinite; }
+  @keyframes blink { 50% { opacity:.2; } }
+  .ov-badge { position:absolute; top:12px; right:12px; font:900 20px Inter; letter-spacing:1px; padding:6px 16px; border-radius:10px;
+              color:#fff; backdrop-filter:blur(6px); }
+  .ov-clock { position:absolute; left:14px; bottom:12px; font:500 12px 'JetBrains Mono',monospace; color:#e2e8f0; }
+  .ov-cam { position:absolute; right:14px; bottom:12px; font-size:12px; color:#cbd5e1; }
+  .bigplay { position:absolute; inset:0; margin:auto; width:74px; height:74px; border-radius:50%; border:1px solid rgba(255,255,255,.25);
+             background:rgba(255,255,255,.1); backdrop-filter:blur(8px); color:#fff; font-size:26px; cursor:pointer; display:grid; place-items:center; }
+  .bigplay.hide { display:none; }
+  .loading { position:absolute; inset:0; display:none; place-items:center; color:var(--mute); font-size:13px; }
+  .loading.on { display:grid; }
+
+  /* timeline with robot */
+  .tl-wrap { position:relative; margin-top:30px; }
+  .tl { position:relative; height:40px; display:flex; gap:3px; cursor:pointer; }
+  .sg { flex:1; border-radius:8px; display:flex; align-items:center; justify-content:center; font:800 11px Inter; letter-spacing:.6px;
+        color:rgba(255,255,255,.95); position:relative; transition:filter .15s, transform .15s; }
+  .sg:hover { filter:brightness(1.15); }
+  .sg.hidden { background:rgba(255,255,255,.05) !important; color:transparent; border:1px dashed rgba(255,255,255,.12); }
+  .sg.unclear { background-image:repeating-linear-gradient(45deg,rgba(255,255,255,.18) 0 6px,transparent 6px 12px) !important; }
+  .sg.cur { transform:translateY(-2px); box-shadow:0 0 0 2px rgba(255,255,255,.85); }
+  .robot-rider { position:absolute; top:-30px; width:30px; height:28px; transform:translateX(-50%); transition:left .25s linear; pointer-events:none;
+                 filter:drop-shadow(0 4px 8px rgba(0,0,0,.5)); }
+  .esc-pin { position:absolute; top:-8px; transform:translateX(-50%); width:16px; height:16px; border-radius:50%; background:var(--nogo);
+             box-shadow:0 0 0 4px rgba(239,68,68,.25); display:grid; place-items:center; font:800 10px Inter; color:#fff; z-index:2; }
+  .axis { display:flex; justify-content:space-between; color:var(--dim); font:500 11px 'JetBrains Mono',monospace; margin-top:6px; }
+  .legend { display:flex; gap:14px; color:var(--mute); font-size:11.5px; margin-top:8px; }
+  .legend i { display:inline-block; width:9px; height:9px; border-radius:3px; margin-right:5px; vertical-align:-1px; }
+
+  /* escalation */
+  .esc { display:none; margin-bottom:12px; padding:12px 14px; border-radius:14px; border:1px solid rgba(239,68,68,.45);
+         background:linear-gradient(135deg,rgba(239,68,68,.16),rgba(239,68,68,.05)); animation:pulse 2s infinite; gap:12px; align-items:flex-start; }
+  .esc.on { display:flex; }
+  @keyframes pulse { 0%,100% { box-shadow:0 0 0 0 rgba(239,68,68,.0); } 50% { box-shadow:0 0 0 6px rgba(239,68,68,.12); } }
+  .esc .ico { font-size:20px; }
+  .esc .act { display:inline-block; font:800 11px Inter; letter-spacing:1px; padding:3px 8px; border-radius:6px; background:var(--nogo); color:#fff; margin-right:8px; }
+  .esc .why { color:#fecaca; font-size:13px; margin-top:4px; }
+
+  /* decision panel */
+  .decision { display:flex; align-items:center; gap:16px; padding:16px; border-radius:16px; border:1px solid var(--line);
+              background:linear-gradient(135deg,rgba(255,255,255,.04),rgba(255,255,255,.01)); position:relative; overflow:hidden; }
+  .decision::after { content:""; position:absolute; inset:-40%; background:radial-gradient(circle at 20% 50%,var(--glow,transparent),transparent 45%); opacity:.35; pointer-events:none; }
+  .orb { width:120px; height:120px; flex:none; border-radius:50%; display:grid; place-items:center; font:900 24px Inter; letter-spacing:1px; color:#fff;
+         position:relative; z-index:1; transition:background .25s, box-shadow .25s; }
+  .orb small { display:block; font:600 10px Inter; letter-spacing:1.5px; opacity:.85; text-align:center; margin-top:-2px; }
+  .dstat { position:relative; z-index:1; flex:1; min-width:0; }
+  .dstat .say { font-size:17px; font-weight:700; letter-spacing:-.2px; }
+  .dstat .meta { color:var(--mute); font-size:12px; margin-top:2px; }
+  .conf { height:6px; background:rgba(255,255,255,.08); border-radius:4px; margin-top:10px; overflow:hidden; }
+  .conf i { display:block; height:100%; border-radius:4px; background:linear-gradient(90deg,#7c9cff,#a78bfa); transition:width .3s; }
+  .flags { margin-top:10px; display:flex; flex-wrap:wrap; gap:6px; }
+  .pill { display:inline-flex; align-items:center; gap:5px; padding:3px 9px; border-radius:999px; border:1px solid var(--line2); background:rgba(255,255,255,.03); font-size:12px; color:#cbd5e1; }
+  .pill.hz { border-color:rgba(239,68,68,.35); background:rgba(239,68,68,.08); color:#fca5a5; }
+  .pill.warn { border-color:rgba(245,158,11,.4); background:rgba(245,158,11,.08); color:#fcd34d; }
+  .pill.ok { border-color:rgba(34,197,94,.35); background:rgba(34,197,94,.08); color:#86efac; }
+  .sect { margin-top:16px; }
+  .reasons { list-style:none; margin:0; padding:0; }
+  .reasons li { display:flex; gap:10px; align-items:flex-start; padding:8px 10px; border-radius:10px; background:rgba(255,255,255,.025); margin-bottom:6px; }
+  .reasons li::before { content:"›"; color:var(--accent); font-weight:800; }
+  .yolo { display:grid; grid-template-columns:repeat(auto-fill,minmax(92px,1fr)); gap:6px; }
+  .yolo div { padding:7px 9px; border-radius:10px; background:rgba(255,255,255,.03); border:1px solid var(--line); }
+  .yolo b { display:block; font-size:16px; } .yolo span { color:var(--mute); font-size:11px; }
+  details.cap { margin-top:10px; border:1px solid var(--line); border-radius:12px; padding:10px 12px; background:rgba(0,0,0,.25); }
+  details.cap summary { cursor:pointer; color:#c7d2fe; font-weight:600; font-size:12.5px; }
+  details.cap p { margin:8px 0 0; color:#cbd5e1; font-size:12.5px; }
+  .foot { color:var(--dim); font-size:11.5px; margin-top:12px; }
+
+  /* scorecard + search */
+  table { width:100%; border-collapse:collapse; font-size:12.5px; margin-top:10px; }
+  th, td { text-align:left; padding:8px 6px; border-bottom:1px solid var(--line); }
+  th { color:var(--dim); font-weight:600; font-size:11px; text-transform:uppercase; letter-spacing:.8px; }
+  td.rank { font-weight:800; color:#c7d2fe; }
+  .bar { height:6px; border-radius:3px; background:rgba(255,255,255,.07); overflow:hidden; width:90px; display:inline-block; vertical-align:middle; margin-right:6px; }
+  .bar i { display:block; height:100%; }
+  .note { color:var(--dim); font-size:11.5px; margin-top:10px; }
+  .search { display:flex; gap:8px; }
+  .search input { flex:1; }
+  .btn { border:0; border-radius:10px; padding:8px 16px; font:600 13px Inter; color:#fff; cursor:pointer;
+         background:linear-gradient(135deg,#4f6bff,#8b5cf6); box-shadow:0 6px 18px rgba(99,102,241,.3); }
+  .chips { display:flex; gap:6px; flex-wrap:wrap; margin-top:8px; }
+  .chips button { border:1px solid var(--line2); background:rgba(255,255,255,.03); color:var(--mute); border-radius:999px; padding:4px 10px; font:12px Inter; cursor:pointer; }
+  .chips button:hover { color:var(--text); border-color:rgba(124,156,255,.5); }
+  .hit { display:flex; gap:10px; align-items:center; padding:9px 10px; border-radius:10px; cursor:pointer; margin-top:6px; background:rgba(255,255,255,.02); border:1px solid transparent; }
+  .hit:hover { border-color:var(--line2); background:rgba(255,255,255,.04); }
+  .chip { font:800 10.5px Inter; letter-spacing:.6px; padding:3px 7px; border-radius:6px; color:#fff; min-width:54px; text-align:center; }
+  .muted { color:var(--mute); }
+  .GO { background:var(--go); } .WAIT { background:var(--wait); } .NO-GO { background:var(--nogo); } .NONE { background:#334155; }
+  .orb.GO { box-shadow:0 0 0 8px rgba(34,197,94,.12),0 0 60px rgba(34,197,94,.45); }
+  .orb.WAIT { box-shadow:0 0 0 8px rgba(245,158,11,.12),0 0 60px rgba(245,158,11,.45); }
+  .orb.NO-GO { box-shadow:0 0 0 8px rgba(239,68,68,.12),0 0 60px rgba(239,68,68,.45); }
+  .robot-led { transition:fill .25s; }
+  @keyframes bob { 50% { transform:translateY(-2px); } }
+  .bob { animation:bob 1.2s ease-in-out infinite; }
+</style>
+</head>
+<body>
+<!-- tiny delivery robot, reused via <use> -->
+<svg width="0" height="0" style="position:absolute">
+  <defs>
+    <symbol id="robot" viewBox="0 0 64 60">
+      <line x1="44" y1="10" x2="44" y2="2" stroke="#cbd5e1" stroke-width="2" stroke-linecap="round"/>
+      <path d="M44 2 L54 5 L44 8 Z" fill="var(--led)" class="robot-led"/>
+      <rect x="6" y="12" width="52" height="30" rx="9" fill="#e2e8f0"/>
+      <rect x="6" y="12" width="52" height="9" rx="6" fill="#cbd5e1"/>
+      <rect x="14" y="25" width="36" height="11" rx="5.5" fill="#0f172a"/>
+      <circle cx="24" cy="30.5" r="3" fill="var(--led)" class="robot-led"/>
+      <circle cx="40" cy="30.5" r="3" fill="var(--led)" class="robot-led"/>
+      <circle cx="15" cy="49" r="7" fill="#1e293b"/><circle cx="15" cy="49" r="2.6" fill="#64748b"/>
+      <circle cx="32" cy="49" r="7" fill="#1e293b"/><circle cx="32" cy="49" r="2.6" fill="#64748b"/>
+      <circle cx="49" cy="49" r="7" fill="#1e293b"/><circle cx="49" cy="49" r="2.6" fill="#64748b"/>
+    </symbol>
+  </defs>
+</svg>
+
+<div class="wrap">
+  <div class="top">
+    <div class="brand">
+      <div class="logo"><svg width="32" height="30" class="bob"><use href="#robot"/></svg></div>
+      <div><h1>CrossWise</h1><p>Crossing copilot for sidewalk delivery robots · GO / WAIT / NO-GO with evidence</p></div>
+    </div>
+    <div class="notice">⚠ Decision support on recorded street footage — it does not control a robot.</div>
+    <div class="stack">
+      <span><b>VAST</b> DataEngine · VastDB</span><span><b>NVIDIA</b> Cosmos Reason · YOLO11</span>
+      <span><b>CoreWeave</b> GPUs</span><span><b>W&amp;B</b> Inference · Weave traces</span><span>built with <b>Cursor</b></span>
+      <a href="label" style="margin-left:auto;font-size:12px;color:#c7d2fe;text-decoration:none">✎ Label for evaluation →</a>
+    </div>
+  </div>
+
+  <p class="label">Featured crossings</p>
+  <div id="tiles" class="tiles"></div>
+
+  <div class="grid">
+    <section class="card">
+      <div class="controls">
+        <select id="clip" title="All scored clips"></select>
+        <div class="seg-ctl"><button id="mReview" class="on">Review</button><button id="mReplay">● Replay as live</button></div>
+        <label class="stepper">Escalate after <input id="n" type="number" min="2" max="12" value="4"> non-GO</label>
+      </div>
+      <div id="esc" class="esc"></div>
+      <div class="stage" id="stage">
+        <video id="vA" class="on" muted playsinline preload="auto"></video>
+        <video id="vB" muted playsinline preload="auto"></video>
+        <div class="shade"></div>
+        <div id="tagReplay" class="tag-replay">REPLAY</div>
+        <div id="ovBadge" class="ov-badge NONE">—</div>
+        <div id="ovClock" class="ov-clock">00.0s</div>
+        <div id="ovCam" class="ov-cam"></div>
+        <div id="loading" class="loading">loading segment…</div>
+        <button id="bigplay" class="bigplay" title="Play">▶</button>
+      </div>
+      <div class="tl-wrap">
+        <svg id="rider" class="robot-rider" viewBox="0 0 64 60"><use href="#robot"/></svg>
+        <div id="tl" class="tl"></div>
+      </div>
+      <div class="axis"><span>0s</span><span id="tlMeta"></span><span id="tlEnd"></span></div>
+      <div class="legend"><span><i class="GO"></i>GO</span><span><i class="WAIT"></i>WAIT</span><span><i class="NO-GO"></i>NO-GO</span>
+        <span><i style="background:repeating-linear-gradient(45deg,#64748b 0 3px,transparent 3px 6px)"></i>unclear</span><span>● escalation</span></div>
+    </section>
+
+    <aside class="card">
+      <p class="label">Robot decision · now</p>
+      <div class="decision" id="decision">
+        <div id="orb" class="orb NONE"><div>—<small>&nbsp;</small></div></div>
+        <div class="dstat">
+          <div style="display:flex;align-items:center;gap:8px"><svg width="26" height="24"><use href="#robot"/></svg><div id="say" class="say">Pick a crossing</div></div>
+          <div id="meta" class="meta"></div>
+          <div class="conf"><i id="confBar" style="width:0"></i></div>
+          <div id="flags" class="flags"></div>
+        </div>
+      </div>
+      <div class="sect"><p class="label">Why</p><ul id="reasons" class="reasons"></ul></div>
+      <div class="sect"><p class="label">Evidence</p>
+        <div id="hz" class="flags" style="margin-top:0"></div>
+        <div id="yolo" class="yolo" style="margin-top:10px"></div>
+        <details id="capBox" class="cap" style="display:none"><summary>NVIDIA Cosmos Reason caption</summary><p id="cap"></p></details>
+      </div>
+      <div id="model" class="foot"></div>
+    </aside>
+  </div>
+
+  <div class="grid2">
+    <section class="card">
+      <p class="label">Crossing scorecard · easiest → hardest</p>
+      <canvas id="chart" height="135"></canvas>
+      <table id="card"></table>
+      <p class="note">Difficulty 0–100 = 50% time without GO + 20% NO-GO share + 20% mean wait before GO (capped 30s) + 10% turning-vehicle rate.
+        Waits are lower bounds (30s clips; streaks that never reach GO count at observed length). Sample: 5–6 clips per camera.</p>
+    </section>
+    <section class="card">
+      <p class="label">Search the street archive</p>
+      <div class="search"><input id="q" placeholder="Describe a moment, e.g. truck blocking the crosswalk"><button class="btn" id="go">Search</button></div>
+      <div class="chips">
+        <button>vehicle turning through crosswalk</button><button>pedestrians waiting at red light</button>
+        <button>construction cones near crosswalk</button><button>emergency vehicle at intersection</button>
+      </div>
+      <div id="hits" class="note">Semantic search over the VAST-indexed street cameras (Cosmos Embed + captions).</div>
+    </section>
+  </div>
+</div>
+
+<script>
+const $ = id => document.getElementById(id);
+const COLORS = { 'GO':'#22c55e', 'WAIT':'#f59e0b', 'NO-GO':'#ef4444' };
+const SAY = { 'GO':'Cross now — path is clear', 'WAIT':'Hold at the curb', 'NO-GO':'Stay back — hazard in the crosswalk' };
+const V = [$('vA'), $('vB')];
+let T = null, idx = 0, act = 0, mode = 'review', chart = null, clips = [], adhoc = false;
+const esc = s => String(s ?? '').replace(/[&<>"]/g, c => ({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;'}[c]));
+const fmt = s => s == null ? '' : `${Math.round(s)}s`;
+const api = p => fetch(p).then(r => { if (!r.ok) throw new Error(r.status); return r.json(); });
+const pretty = cam => cam.replace('sf_streets_cam-', 'SF crossing ').replace('nyc_streets_cam-', 'NYC crossing ');
+const vid = () => V[act];
+const segSrc = i => `video?source=${encodeURIComponent(T.segments[i].segment_id)}`;
+const clipTime = () => adhoc || !T ? (vid().currentTime || 0) : T.segments[idx].start_sec + (vid().currentTime || 0);
+
+/* ---------- segment-stitched player (segments are browser-safe H.264) ---------- */
+function prep(el, i) {
+  if (!T || i >= T.segments.length) return;
+  const s = segSrc(i);
+  if (el.dataset.src !== s) { el.dataset.src = s; el.src = s; el.load(); }
+}
+function show(i, offset = 0, play = false) {
+  idx = i;
+  let el = vid();
+  if (el.dataset.src !== segSrc(i)) {
+    const other = V[1 - act];
+    if (other.dataset.src === segSrc(i)) { act = 1 - act; el = other; } else prep(el, i);
+  }
+  V.forEach((v, k) => v.classList.toggle('on', k === act));
+  V[1 - act].pause();
+  const go = () => { try { el.currentTime = offset; } catch (e) {} if (play) el.play().catch(() => {}); };
+  if (el.readyState >= 1) go(); else el.addEventListener('loadedmetadata', go, { once: true });
+  prep(V[1 - act], i + 1);
+  render();
+}
+function seekClip(t, play) {
+  if (!T) return;
+  const i = Math.max(0, T.segments.findIndex(s => t >= s.start_sec && t < s.end_sec));
+  show(i, t - T.segments[i].start_sec, play ?? !vid().paused);
+}
+V.forEach(v => {
+  v.addEventListener('ended', () => {
+    if (v !== vid()) return;
+    if (!adhoc && T && idx + 1 < T.segments.length) show(idx + 1, 0, true); else render();
+  });
+  v.addEventListener('timeupdate', () => { if (v === vid()) render(); });
+  v.addEventListener('waiting', () => { if (v === vid()) $('loading').classList.add('on'); });
+  ['playing', 'canplay', 'seeked'].forEach(e => v.addEventListener(e, () => { if (v === vid()) { $('loading').classList.remove('on'); render(); } }));
+  v.addEventListener('play', () => $('bigplay').classList.add('hide'));
+  v.addEventListener('pause', () => { if (v === vid() && !v.ended) $('bigplay').classList.remove('hide'); });
+});
+$('bigplay').onclick = () => vid().play();
+$('stage').addEventListener('click', e => { if (e.target.id === 'bigplay') return; vid().paused ? vid().play() : vid().pause(); });
+
+/* ---------- data ---------- */
+async function loadClips() {
+  clips = await api('api/clips');
+  $('clip').innerHTML = clips.map(c => `<option value="${esc(c.video)}">${c.demo ? '★ ' : ''}${esc(pretty(c.camera_id))} · ${esc(c.name.replace('.mp4', '').slice(-28))} · GO ${c.go}/${c.segments}</option>`).join('');
+  const demo = clips.filter(c => c.demo);
+  const tl = await Promise.all(demo.map(c => api(`api/timeline?video=${encodeURIComponent(c.video)}&n=${$('n').value}`)));
+  $('tiles').innerHTML = demo.map((c, k) => {
+    const e = tl[k].escalations[0];
+    return `<div class="tile" data-v="${esc(c.video)}">
+      <div class="t1">${esc(pretty(c.camera_id))} · ${esc((c.location || '').replace('_', ' '))}</div>
+      <div class="t2">${e ? `escalates at ${fmt(e.at_sec)} → ${e.action.replace('_', ' ').toLowerCase()}` : `GO in ${c.go} of ${c.segments} moments · no escalation`}</div>
+      <div class="mini">${tl[k].segments.map(s => `<i style="background:${COLORS[s.decision]}"></i>`).join('')}</div></div>`;
+  }).join('');
+  const start = demo.find(c => c.camera_id === 'sf_streets_cam-4') || clips[0];
+  await loadClip(start.video);
+}
+async function loadClip(v, at = 0) {
+  T = await api(`api/timeline?video=${encodeURIComponent(v)}&n=${$('n').value}`);
+  adhoc = false;
+  $('clip').value = v;
+  document.querySelectorAll('.tile').forEach(t => t.classList.toggle('on', t.dataset.v === v));
+  V.forEach(x => { x.pause(); x.dataset.src = ''; });
+  $('tlEnd').textContent = fmt(T.segments.at(-1).end_sec);
+  $('tlMeta').textContent = `${pretty(T.camera_id)} · ${T.segments[0].caption_source === 'vss_index' ? 'index captions' : 'Cosmos Reason captions'}`;
+  $('ovCam').textContent = pretty(T.camera_id);
+  seekClip(at, false);
+}
+
+/* ---------- render ---------- */
+function current() { return T && !adhoc ? T.segments[idx] : null; }
+function render() {
+  const t = clipTime();
+  $('ovClock').textContent = `${t.toFixed(1).padStart(4, '0')}s`;
+  if (!T || adhoc) return;
+  const end = T.segments.at(-1).end_sec, cur = current();
+  const seen = s => mode !== 'replay' || s.start_sec <= t + 0.01;
+  $('tl').innerHTML = T.segments.map((s, i) => `<div class="sg ${seen(s) ? '' : 'hidden'} ${s.unclear ? 'unclear' : ''} ${i === idx ? 'cur' : ''}"
+      style="background:${COLORS[s.decision]}" data-i="${i}" title="${fmt(s.start_sec)}–${fmt(s.end_sec)} · ${s.decision}">${seen(s) ? s.decision : ''}</div>`).join('')
+    + T.escalations.filter(e => mode !== 'replay' || t >= e.at_sec - 0.05)
+      .map(e => `<div class="esc-pin" style="left:${e.at_sec / end * 100}%" title="${esc(e.action)}">!</div>`).join('');
+  $('rider').style.left = `${Math.min(100, t / end * 100)}%`;
+  const color = COLORS[cur.decision];
+  document.documentElement.style.setProperty('--led', color);
+  showDecision(cur);
+  const e = T.escalations.filter(e => mode !== 'replay' || t >= e.at_sec - 0.05).at(-1);
+  $('esc').classList.toggle('on', !!e);
+  if (e) $('esc').innerHTML = `<div class="ico">🚨</div><div><span class="act">${e.action.replace('_', ' ')}</span>
+      <b>Robot stuck ${fmt(e.waited_s)}</b> <span class="muted">· fired at ${fmt(e.at_sec)} · N=${T.n}</span><div class="why">${esc(e.reason)}</div></div>`;
+}
+let lastShown = null;
+function showDecision(s) {
+  if (lastShown === s) return; lastShown = s;
+  const d = s.decision;
+  $('ovBadge').className = 'ov-badge ' + d; $('ovBadge').textContent = d;
+  $('orb').className = 'orb ' + d;
+  $('orb').innerHTML = `<div>${d}<small>${s.unclear ? 'UNCLEAR' : 'SEG ' + s.segment_number}</small></div>`;
+  $('decision').style.setProperty('--glow', COLORS[d]);
+  $('say').textContent = s.unclear ? 'Hold — evidence unclear' : SAY[d];
+  $('meta').textContent = `${fmt(s.start_sec)}–${fmt(s.end_sec)} · signal ${s.signal.replace('_', ' ')} · confidence ${Math.round(s.confidence * 100)}%`;
+  $('confBar').style.width = `${Math.round(s.confidence * 100)}%`;
+  let f = '';
+  if (s.unclear) f += '<span class="pill warn">unclear → WAIT</span>';
+  if (s.llm_decision !== s.decision) f += `<span class="pill warn">🛡 guardrail overrode ${esc(s.llm_decision)}</span>`;
+  if (!f) f = '<span class="pill ok">✓ consistent with Cosmos tags</span>';
+  $('flags').innerHTML = f;
+  $('reasons').innerHTML = s.reasons.map(r => `<li>${esc(r)}</li>`).join('');
+  $('hz').innerHTML = `<span class="pill">🚦 ${esc(s.signal.replace('_', ' '))}</span>` +
+    ((s.hazards || []).map(h => `<span class="pill hz">${esc(h.replace(/_/g, ' '))}</span>`).join('') || '<span class="pill ok">no hazards</span>') +
+    Object.entries(s.cosmos_tags || {}).map(([k, v]) => `<span class="pill">${esc(k)}=${esc(v)}</span>`).join('');
+  const y = Object.entries(s.yolo || {}).filter(([k]) => k !== 'vehicles_total');
+  $('yolo').innerHTML = y.map(([k, v]) => `<div><b>${v}</b><span>${esc(k)}</span></div>`).join('') || '<span class="muted">no YOLO detections</span>';
+  $('capBox').style.display = s.caption ? '' : 'none';
+  $('cap').textContent = s.caption || '';
+  $('model').textContent = `Decision by ${s.model} on W&B Inference · traced in Weave · YOLO11 counts from the VAST index` +
+    (s.caption ? '' : ' · index caption hidden (may describe individuals)');
+}
+
+/* ---------- scorecard ---------- */
+async function loadCard() {
+  const card = await api(`api/scorecard?n=${$('n').value}`);
+  $('card').innerHTML = `<tr><th>#</th><th>Crossing</th><th>Difficulty</th><th>GO time</th><th>Wait→GO</th><th>Turning</th><th>Esc.</th></tr>` +
+    card.map(c => `<tr><td class="rank">${c.rank}</td><td>${esc(pretty(c.camera_id))}</td>
+      <td><span class="bar"><i style="width:${c.difficulty}%;background:linear-gradient(90deg,#22c55e,#f59e0b,#ef4444)"></i></span>${c.difficulty}</td>
+      <td>${(c.go_share * 100).toFixed(0)}%</td><td>≥${c.avg_wait_before_go_s}s</td><td>${c.turning_hazards}</td><td>${c.escalations}</td></tr>`).join('');
+  const data = { labels: card.map(c => pretty(c.camera_id)), datasets: [
+    { label: 'GO', data: card.map(c => +(c.go_share * 100).toFixed(1)), backgroundColor: COLORS.GO, borderRadius: 4 },
+    { label: 'WAIT', data: card.map(c => +((1 - c.go_share - c.nogo_share) * 100).toFixed(1)), backgroundColor: COLORS.WAIT, borderRadius: 4 },
+    { label: 'NO-GO', data: card.map(c => +(c.nogo_share * 100).toFixed(1)), backgroundColor: COLORS['NO-GO'], borderRadius: 4 }] };
+  if (chart) { chart.data = data; chart.update(); return; }
+  Chart.defaults.font.family = 'Inter';
+  chart = new Chart($('chart'), { type: 'bar', data, options: { indexAxis: 'y', responsive: true,
+    scales: { x: { stacked: true, max: 100, ticks: { color: '#5b6475', callback: v => v + '%' }, grid: { color: 'rgba(255,255,255,.05)' } },
+              y: { stacked: true, ticks: { color: '#cbd5e1' }, grid: { display: false } } },
+    plugins: { legend: { labels: { color: '#8a94a6', boxWidth: 10 } }, tooltip: { callbacks: { label: c => `${c.dataset.label}: ${c.raw}% of time` } } } } });
+}
+
+/* ---------- search ---------- */
+async function doSearch(q) {
+  q = (q ?? $('q').value).trim(); if (!q) return; $('q').value = q;
+  $('hits').innerHTML = '<span class="muted">Searching the VAST index…</span>';
+  try {
+    const hits = await api(`api/search?q=${encodeURIComponent(q)}`);
+    if (!hits.length) { $('hits').textContent = 'No street-crossing hits. Try a broader query.'; return; }
+    $('hits').innerHTML = hits.map(h => `<div class="hit" data-v="${esc(h.video)}" data-s="${esc(h.source)}" data-t="${h.start_sec}" data-known="${h.decision ? 1 : 0}">
+      <span class="chip ${h.decision || 'NONE'}">${h.decision || 'n/a'}</span><span>${esc(pretty(h.camera_id))} · ${fmt(h.start_sec)}–${fmt(h.end_sec)}</span>
+      <span class="muted" style="margin-left:auto;font:500 11px 'JetBrains Mono'">sim ${h.score}</span></div>`).join('') +
+      '<p class="note">Scored hits open on the decision timeline; n/a hits play without a verdict.</p>';
+  } catch (e) { $('hits').textContent = 'Search failed (' + e.message + ').'; }
+}
+$('hits').addEventListener('click', async ev => {
+  const h = ev.target.closest('.hit'); if (!h) return;
+  setMode('review');
+  if (h.dataset.known === '1') { await loadClip(h.dataset.v, +h.dataset.t); vid().play().catch(() => {}); return; }
+  adhoc = true; lastShown = null;
+  const el = vid(); el.dataset.src = `video?source=${encodeURIComponent(h.dataset.s)}`; el.src = el.dataset.src; el.play().catch(() => {});
+  $('tl').innerHTML = ''; $('esc').classList.remove('on');
+  $('ovBadge').className = 'ov-badge NONE'; $('ovBadge').textContent = 'n/a';
+  $('orb').className = 'orb NONE'; $('orb').innerHTML = '<div>n/a<small>NOT SCORED</small></div>';
+  $('say').textContent = 'Search hit — not scored yet'; $('meta').textContent = ''; $('flags').innerHTML = '';
+  $('reasons').innerHTML = ''; $('hz').innerHTML = ''; $('yolo').innerHTML = ''; $('capBox').style.display = 'none';
+  document.querySelectorAll('.tile').forEach(t => t.classList.remove('on'));
+});
+document.querySelectorAll('.chips button').forEach(b => b.onclick = () => doSearch(b.textContent));
+
+/* ---------- controls ---------- */
+function setMode(m) {
+  mode = m; $('tagReplay').classList.toggle('on', m === 'replay');
+  $('mReview').classList.toggle('on', m === 'review'); $('mReplay').classList.toggle('on', m === 'replay');
+  lastShown = null; render();
+}
+$('mReplay').onclick = () => { if (!T || adhoc) return; setMode('replay'); show(0, 0, true); };
+$('mReview').onclick = () => setMode('review');
+$('clip').onchange = e => { setMode('review'); loadClip(e.target.value); };
+$('tiles').onclick = e => { const t = e.target.closest('.tile'); if (t) { setMode('review'); loadClip(t.dataset.v); } };
+$('n').onchange = () => { if (T && !adhoc) loadClip(T.video, clipTime()); loadCard(); };
+$('tl').onclick = e => { const s = e.target.closest('.sg'); if (s && !s.classList.contains('hidden')) show(+s.dataset.i, 0.01, !vid().paused); };
+$('go').onclick = () => doSearch();
+$('q').onkeydown = e => { if (e.key === 'Enter') doSearch(); };
+
+loadClips().catch(e => { $('say').textContent = 'Failed to load clips: ' + e.message; });
+loadCard().catch(() => {});
+</script>
+</body>
+</html>

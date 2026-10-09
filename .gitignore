@@ -1,0 +1,14 @@
+# secrets and local state: never commit
+.env
+.env.*
+*.config
+*-k8s.yaml
+*secret*.yaml
+tmp/
+wandb/
+.venv/
+__pycache__/
+*.pyc
+*.log
+# raw phase-1 search dumps (contain index captions that describe individuals)
+data/phase1_*.json
